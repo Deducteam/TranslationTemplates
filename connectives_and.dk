@@ -1,0 +1,18 @@
+Prop : Type.
+Prf : Prop -> Type.
+
+and : Prop -> Prop -> Prop.
+not : Prop -> Prop.
+bot : Prop.
+
+and_i : p : Prop -> Prf p -> q : Prop -> Prf q -> Prf (and p q).
+and_el : p : Prop -> q : Prop -> Prf (and p q) -> Prf p.
+and_er : p : Prop -> q : Prop -> Prf (and p q) -> Prf q.
+
+neg_i : p : Prop -> (Prf p -> Prf bot) -> Prf (not p).
+neg_e : p : Prop -> Prf (not p) -> Prf p -> Prf bot.
+
+dne : p : Prop -> Prf (not (not p)) -> Prf p.
+
+thm thm1 : p : Prop -> Prf p -> Prf (and p p)
+:= p => pP => and_i p pP p pP.
