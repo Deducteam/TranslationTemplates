@@ -28,12 +28,12 @@ let morphism_mident _ =
 let rec morphism_term v = 
   match v with
   | T.App (t, u, l) -> T.mk_App (morphism_term t) (morphism_term u) (List.map (fun x -> morphism_term x) l)
-  | Lam (lo, id, None, t) -> T.mk_Lam lo (morphism_ident id) None (morphism_term t) 
-  | Lam (lo, id, Some u, t) -> T.mk_Lam lo (morphism_ident id) (Some (morphism_term u)) (morphism_term t) 
-  | Pi (lo, id, a, b) -> T.mk_Pi lo (morphism_ident id) (morphism_term a) (morphism_term b)
+  | Lam (lo, id, None, t) -> T.mk_Lam lo id None (morphism_term t) 
+  | Lam (lo, id, Some u, t) -> T.mk_Lam lo id (Some (morphism_term u)) (morphism_term t) 
+  | Pi (lo, id, a, b) -> T.mk_Pi lo id (morphism_term a) (morphism_term b)
   | Kind -> v
   | Type _ -> v
-  | DB (lo, id, n) -> T.mk_DB lo (morphism_ident id) n
+  | DB (lo, id, n) -> T.mk_DB lo id n
   | Const (lo, n) -> T.mk_Const lo (B.mk_name (morphism_mident (B.md n)) (morphism_ident (B.id n)))
 ;;
 
@@ -119,6 +119,14 @@ let app_option ty u l =
   | Some t -> Some (T.mk_App (op_var t add2 0) u l)
 ;;
 
+(* Put a prime on ident id *)
+let prime_ident id = 
+  (if B.ident_eq id B.dmark then 
+    id
+  else 
+    B.mk_ident (String.concat "" [B.string_of_ident id ; "'"]))
+;;
+
 (* Logical relation on ident id *)
 let relation_ident id = 
   (if B.ident_eq id B.dmark then 
@@ -136,41 +144,41 @@ let rec relation_term v arg =
       (morphism2_term u) 
       (List.cons (relation_term u None) (List.flatten (List.map (fun w -> [morphism2_term w; relation_term w None]) l)))
   | Lam (lo, id, None, t) -> 
-    T.mk_Lam lo (morphism_ident id) None
-      (T.mk_Lam lo (relation_ident id) None
+    T.mk_Lam lo id None
+      (T.mk_Lam lo (prime_ident id) None
         (relation_term t None))
   | Lam (lo, id, Some u, t) -> 
-    T.mk_Lam lo (morphism_ident id) 
+    T.mk_Lam lo id
       (Some (morphism2_term u)) 
-      (T.mk_Lam lo (relation_ident id) 
+      (T.mk_Lam lo (prime_ident id) 
         (Some (T.mk_App 
           (op_var (relation_term u None) add1 0)
-          (T.mk_DB lo (morphism_ident id) 0) [])) 
+          (T.mk_DB lo id 0) [])) 
         (relation_term t None))
   | Pi (lo, id, a, b) -> 
     (if is_kind b then 
-      T.mk_Pi lo (morphism_ident id) 
+      T.mk_Pi lo id 
         (morphism2_term a) 
-        (T.mk_Pi lo (relation_ident id) 
-          (T.mk_App (op_var (relation_term a None) add1 0) (T.mk_DB lo (morphism_ident id) 0) []) 
-          (relation_term b (app_option arg (T.mk_DB lo (morphism_ident id) 1) [])))
+        (T.mk_Pi lo (prime_ident id) 
+          (T.mk_App (op_var (relation_term a None) add1 0) (T.mk_DB lo id 0) []) 
+          (relation_term b (app_option arg (T.mk_DB lo id 1) [])))
     else 
       T.mk_Lam lo (B.mk_ident "f") 
         (Some (morphism2_term v))
-        (T.mk_Pi lo (morphism_ident id) 
+        (T.mk_Pi lo id 
           (op_var (morphism2_term a) add1 0) 
-          (T.mk_Pi lo (relation_ident id) 
-            (T.mk_App (op_var (relation_term a None) add2 0) (T.mk_DB lo (morphism_ident id) 0) []) 
+          (T.mk_Pi lo (prime_ident id) 
+            (T.mk_App (op_var (relation_term a None) add2 0) (T.mk_DB lo id 0) []) 
             (T.mk_App 
               (op_var (relation_term b None) add1 2)
-              (T.mk_App (T.mk_DB lo (B.mk_ident "f") 2) (T.mk_DB lo (morphism_ident id) 1) []) 
+              (T.mk_App (T.mk_DB lo (B.mk_ident "f") 2) (T.mk_DB lo id 1) []) 
               []))))
   | Kind -> v
   | Type lo -> 
     (match arg with 
     | None -> v (* Do not happen *)
     | Some t -> T.mk_Pi lo B.dmark t v)
-  | DB (lo, id, n) -> T.mk_DB lo (relation_ident id) (n * 2)
+  | DB (lo, id, n) -> T.mk_DB lo (prime_ident id) (n * 2)
   | Const (lo, n) -> T.mk_Const lo (B.mk_name (morphism_mident (B.md n)) (relation_ident (B.id n)))
 ;;
 
@@ -217,7 +225,7 @@ let m_ident id =
   (if B.ident_eq id B.dmark then 
     id
   else 
-    B.mk_ident (String.concat "" [B.string_of_ident id ; "_mu"]))
+    B.mk_ident (String.concat "" [B.string_of_ident id ; "_m"]))
 ;;
 
 (* Embedding relation on ident id *)
@@ -225,7 +233,7 @@ let r_ident id =
   (if B.ident_eq id B.dmark then 
     id
   else 
-    B.mk_ident (String.concat "" [B.string_of_ident id ; "_rho"]))
+    B.mk_ident (String.concat "" [B.string_of_ident id ; "_r"]))
 ;;
 
 (* Embedding on mident id *)
@@ -242,26 +250,26 @@ let rec m_term v =
       (m_term u) 
       (List.cons (r_term u None) (List.flatten (List.map (fun w -> [m_term w; r_term w None]) l)))
   | Lam (lo, id, None, t) -> 
-    T.mk_Lam lo (m_ident id) None
-      (T.mk_Lam lo (r_ident id) None
+    T.mk_Lam lo id None
+      (T.mk_Lam lo (prime_ident id) None
         (m_term t))
   | Lam (lo, id, Some u, t) -> 
-    T.mk_Lam lo (m_ident id) 
+    T.mk_Lam lo id 
       (Some (m_term u)) 
-      (T.mk_Lam lo (r_ident id) 
+      (T.mk_Lam lo (prime_ident id) 
         (Some (T.mk_App 
           (op_var (r_term u None) add1 0)
-          (T.mk_DB lo (m_ident id) 0) [])) 
+          (T.mk_DB lo id 0) [])) 
         (m_term t))
   | Pi (lo, id, a, b) -> 
-    T.mk_Pi lo (m_ident id) 
+    T.mk_Pi lo id 
         (m_term a) 
-        (T.mk_Pi lo (r_ident id) 
-          (T.mk_App (op_var (r_term a None) add1 0) (T.mk_DB lo (m_ident id) 0) []) 
+        (T.mk_Pi lo (prime_ident id) 
+          (T.mk_App (op_var (r_term a None) add1 0) (T.mk_DB lo id 0) []) 
           (m_term b))
   | Kind -> v
   | Type _ -> v
-  | DB (lo, id, n) -> T.mk_DB lo (m_ident id) (2* n + 1)
+  | DB (lo, id, n) -> T.mk_DB lo id (2* n + 1)
   | Const (lo, n) -> T.mk_Const lo (B.mk_name (mr_mident (B.md n)) (m_ident (B.id n)))
 (* Embedding relation on term v *)
 and r_term v arg = 
@@ -272,34 +280,34 @@ and r_term v arg =
       (m_term u) 
       (List.cons (r_term u None) (List.flatten (List.map (fun w -> [m_term w; r_term w None]) l)))
   | Lam (lo, id, None, t) -> 
-    T.mk_Lam lo (m_ident id) None
-      (T.mk_Lam lo (r_ident id) None
+    T.mk_Lam lo id None
+      (T.mk_Lam lo (prime_ident id) None
         (r_term t None))
   | Lam (lo, id, Some u, t) -> 
-    T.mk_Lam lo (m_ident id) 
+    T.mk_Lam lo id 
       (Some (m_term u)) 
-      (T.mk_Lam lo (r_ident id) 
+      (T.mk_Lam lo (prime_ident id) 
         (Some (T.mk_App 
           (op_var (r_term u None) add1 0)
-          (T.mk_DB lo (m_ident id) 0) [])) 
+          (T.mk_DB lo id 0) [])) 
         (r_term t None))
   | Pi (lo, id, a, b) -> 
     (if is_kind b then 
-      T.mk_Pi lo (m_ident id) 
+      T.mk_Pi lo id 
         (m_term a) 
-        (T.mk_Pi lo (r_ident id) 
-          (T.mk_App (op_var (r_term a None) add1 0) (T.mk_DB lo (m_ident id) 0) []) 
-          (r_term b (app_option arg (T.mk_DB lo (m_ident id) 1) [T.mk_DB lo (m_ident id) 0])))
+        (T.mk_Pi lo (prime_ident id) 
+          (T.mk_App (op_var (r_term a None) add1 0) (T.mk_DB lo id 0) []) 
+          (r_term b (app_option arg (T.mk_DB lo id 1) [T.mk_DB lo (prime_ident id) 0])))
     else 
       T.mk_Lam lo (B.mk_ident "f") 
         (Some (m_term v))
-        (T.mk_Pi lo (m_ident id) 
+        (T.mk_Pi lo id
           (op_var (m_term a) add1 0) 
-          (T.mk_Pi lo (r_ident id) 
-            (T.mk_App (op_var (r_term a None) add2 0) (T.mk_DB lo (m_ident id) 0) []) 
+          (T.mk_Pi lo (prime_ident id) 
+            (T.mk_App (op_var (r_term a None) add2 0) (T.mk_DB lo id 0) []) 
             (T.mk_App 
               (op_var (r_term b None) add1 2)
-              (T.mk_App (T.mk_DB lo (B.mk_ident "f") 2) (T.mk_DB lo (m_ident id) 1) [(T.mk_DB lo (r_ident id) 0)]) 
+              (T.mk_App (T.mk_DB lo (B.mk_ident "f") 2) (T.mk_DB lo id 1) [(T.mk_DB lo (prime_ident id) 0)]) 
               []))))
   | Kind -> v
   | Type lo -> 
