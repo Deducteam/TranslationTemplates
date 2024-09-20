@@ -1,0 +1,14 @@
+Prop : Type.
+injective Prf : Prop -> Type.
+Set : Type.
+injective El : Set -> Type.
+
+imp : Prop -> Prop -> Prop.
+or : Prop -> Prop -> Prop.
+
+imp_i : p : Prop -> q : Prop -> (Prf p -> Prf q) -> Prf (imp p q).
+imp_e : p : Prop -> q : Prop -> Prf (imp p q) -> Prf p -> Prf q.
+
+or_il : p : Prop -> Prf p -> q : Prop -> Prf (or p q).
+or_ir : p : Prop ->  q : Prop -> Prf q -> Prf (or p q).
+or_e : p : Prop -> q : Prop -> Prf (or p q) -> r : Prop -> (Prf p -> Prf r) -> (Prf q -> Prf r) -> Prf r.

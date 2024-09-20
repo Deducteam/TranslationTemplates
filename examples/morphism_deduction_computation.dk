@@ -1,0 +1,60 @@
+#REQUIRE computation.
+
+def Prop_mu : Type := computation.Prop.
+
+def Prf_mu : Prop_mu -> Type := computation.Prf.
+
+def Set_mu : Type := computation.Set.
+
+def El_mu : Set_mu -> Type := computation.El.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  computation.imp.
+
+def or_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  computation.or.
+
+def imp_i_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu q) ->
+  Prf_mu (imp_mu p q)
+  :=
+  p => q => H => H.
+
+def imp_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (imp_mu p q)) ->
+  (Prf_mu p) -> Prf_mu q
+  :=
+  p => q => H => H.
+
+def or_il_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu -> Prf_mu (or_mu p q)
+  :=
+  p => Hp => q => r => Hpr => Hqr => Hpr Hp.
+
+def or_ir_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (or_mu p q)
+  :=
+  p => q => Hq => r => Hpr => Hqr => Hqr Hq.
+
+def or_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (or_mu p q)) ->
+  r:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu r) ->
+  ((Prf_mu q) -> Prf_mu r) -> Prf_mu r
+  :=
+  p => q => H => H.
+

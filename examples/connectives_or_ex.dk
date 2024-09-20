@@ -1,0 +1,26 @@
+Set : Type.
+def El : Set -> Type.
+Prop : Type.
+Prf : Prop -> Type.
+
+o : Set.
+[ ] El o --> Prop.
+arr : Set -> Set -> Set.
+[x, y] El (arr x y) --> El x -> El y.
+
+or : Prop -> Prop -> Prop.
+ex : a : Set -> (El a -> Prop) -> Prop.
+not : Prop -> Prop.
+bot : Prop.
+
+or_il : p : Prop -> Prf p -> q : Prop -> Prf (or p q).
+or_ir : p : Prop ->  q : Prop -> Prf q -> Prf (or p q).
+or_e : p : Prop -> q : Prop -> Prf (or p q) -> r : Prop -> (Prf p -> Prf r) -> (Prf q -> Prf r) -> Prf r.
+
+ex_i : a : Set -> p : (El a -> Prop) -> t : El a -> Prf (p t) -> Prf (ex a p).
+ex_e : a : Set -> p : (El a -> Prop) -> Prf (ex a p) -> r : Prop -> (x : El a -> Prf (p x) -> Prf r) -> Prf r.
+
+neg_i : p : Prop -> (Prf p -> Prf bot) -> Prf (not p).
+neg_e : p : Prop -> Prf (not p) -> Prf p -> Prf bot.
+
+dne : p : Prop -> Prf (not (not p)) -> Prf p.

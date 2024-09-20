@@ -1,0 +1,18 @@
+tm : Type.
+Prop : Type.
+injective Prf : Prop -> Type.
+
+impd : (p : Prop) -> (Prf p -> Prop) -> Prop.
+impd_i : p : Prop -> q : (Prf p -> Prop) -> (z : Prf p -> Prf (q z)) -> Prf (impd p q).
+impd_e : p : Prop -> q : (Prf p -> Prop) -> Prf (impd p q) -> z : Prf p -> Prf (q z).
+
+all : (tm -> Prop) -> Prop.
+all_i : p : (tm -> Prop) -> (x : tm -> Prf (p x)) -> Prf (all p).
+all_e : p : (tm -> Prop) -> Prf (all p) -> x : tm -> Prf (p x).
+
+is_human : tm -> Prop.
+is_cat : tm -> Prop.
+pet : tm -> tm -> Prop.
+purr : tm -> Prop.
+
+ax : h : tm -> c : tm -> Prf (is_human h) -> Prf (is_cat c) -> Prf (pet h c) -> Prf (purr c).

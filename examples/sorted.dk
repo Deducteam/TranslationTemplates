@@ -1,0 +1,19 @@
+Set : Type.
+injective El : Set -> Type.
+Prop : Type.
+injective Prf : Prop -> Type.
+
+impd : (p : Prop) -> (Prf p -> Prop) -> Prop.
+impd_i : p : Prop -> q : (Prf p -> Prop) -> (z : Prf p -> Prf (q z)) -> Prf (impd p q).
+impd_e : p : Prop -> q : (Prf p -> Prop) -> Prf (impd p q) -> z : Prf p -> Prf (q z).
+
+all : (a : Set) -> (El a -> Prop) -> Prop.
+all_i : a : Set -> p : (El a -> Prop) -> (x : El a -> Prf (p x)) -> Prf (all a p).
+all_e : a : Set -> p : (El a -> Prop) -> Prf (all a p) -> x : El a -> Prf (p x).
+
+human : Set.
+cat : Set.
+pet : El human -> El cat -> Prop.
+purr : El cat -> Prop.
+
+ax : h : El human -> c : El cat -> Prf (pet h c) -> Prf (purr c).

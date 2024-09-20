@@ -1,0 +1,107 @@
+#REQUIRE curry.
+
+unit : Type.
+star : unit.
+
+def tp_mu : Type := curry.tp.
+
+def tp_rho : tp_mu -> Type := A => unit.
+
+def arr_mu :
+  tp_mu -> tp_mu -> tp_mu
+  :=
+  curry.arr.
+
+def arr_rho :
+  (f:(h:tp_mu -> h0:tp_mu -> tp_mu) =>
+   h:tp_mu ->
+   h':(tp_rho h) ->
+   (f0:(h0:tp_mu -> tp_mu) =>
+    h0:tp_mu ->
+    h'0:(tp_rho h0) -> tp_rho (f0 h0))
+     (f h))
+    arr_mu
+  :=
+  A => A' => B => B' => star.
+
+def tm_mu : tp_mu -> Type := A => curry.tm.
+
+def tm_rho :
+  h:tp_mu -> h':(tp_rho h) -> (tm_mu h) -> Type
+  :=
+  A => A' => x => curry.oftype x A.
+
+def lam_mu :
+  A:tp_mu ->
+  B:tp_mu ->
+  ((tm_mu A) -> tm_mu B) ->
+  tm_mu (arr_mu A B)
+  :=
+  A => B => f => curry.lam f.
+
+def lam_rho :
+  (f:(A:tp_mu ->
+      B:tp_mu ->
+      h:(h:(tm_mu A) -> tm_mu B) ->
+      tm_mu (arr_mu A B)) =>
+   A:tp_mu ->
+   A':(tp_rho A) ->
+   (f0:(B:tp_mu ->
+        h:(h:(tm_mu A) -> tm_mu B) ->
+        tm_mu (arr_mu A B)) =>
+    B:tp_mu ->
+    B':(tp_rho B) ->
+    (f1:(h:(h:(tm_mu A) -> tm_mu B) ->
+         tm_mu (arr_mu A B)) =>
+     h:(h:(tm_mu A) -> tm_mu B) ->
+     h':((f2:(h0:(tm_mu A) -> tm_mu B) =>
+          h0:(tm_mu A) ->
+          h':(tm_rho A A' h0) -> tm_rho B B' (f2 h0))
+           h) ->
+     tm_rho
+       (arr_mu A B)
+       (arr_rho A A' B B')
+       (f1 h))
+      (f0 B))
+     (f A))
+    lam_mu
+  :=
+  A => A' => B => B' => f => f' => curry.oftype_lam A B f f'.
+
+def app_mu :
+  A:tp_mu ->
+  B:tp_mu ->
+  (tm_mu (arr_mu A B)) ->
+  (tm_mu A) -> tm_mu B
+  :=
+  A => B => f => x => curry.app f x.
+
+def app_rho :
+  (f:(A:tp_mu ->
+      B:tp_mu ->
+      h:(tm_mu (arr_mu A B)) ->
+      h0:(tm_mu A) -> tm_mu B) =>
+   A:tp_mu ->
+   A':(tp_rho A) ->
+   (f0:(B:tp_mu ->
+        h:(tm_mu (arr_mu A B)) ->
+        h0:(tm_mu A) -> tm_mu B) =>
+    B:tp_mu ->
+    B':(tp_rho B) ->
+    (f1:(h:(tm_mu (arr_mu A B)) ->
+         h0:(tm_mu A) -> tm_mu A) =>
+     h:(tm_mu (arr_mu A B)) ->
+     h':(tm_rho
+           (arr_mu A B)
+           (arr_rho A A' B B')
+           h) ->
+     (f2:(h0:(tm_mu A) -> tm_mu B) =>
+      h0:(tm_mu A) ->
+      h'0:(tm_rho A A' h0) -> tm_rho B B' (f2 h0))
+       (f1 h))
+      (f0 B))
+     (f A))
+    app_mu
+  :=
+  A => A' => B => B' => f => f' => x => x' => curry.oftype_app A B f x f' x'.
+

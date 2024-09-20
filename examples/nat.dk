@@ -1,0 +1,41 @@
+Set : Type.
+injective El : Set -> Type.
+o : Set.
+injective Prf : El o -> Type.
+
+arrd : (a : Set) -> (El a -> Set) -> Set.
+[a, b] El (arrd a b) --> (z : El a) -> El (b z).
+
+impd : (a : El o) -> (Prf a -> El o) -> El o.
+[a, b] Prf (impd a b) --> (z : Prf a) -> Prf (b z).
+
+pi : (a : El o) -> (Prf a -> Set) -> Set.
+[a, b] El (pi a b) --> (z : Prf a) -> El (b z).
+
+fa : (a : Set) -> (El a -> El o) -> El o.
+[a, b] Prf (fa a b) --> (z : El a) -> Prf (b z).
+
+nat : Set.
+0 : El nat.
+succ : El nat -> El nat.
+geq : El nat -> El nat -> El o.
+
+ax_1 : (x : El nat) -> Prf (geq x x).
+ax_2 : (x : El nat) -> Prf (geq (succ x) x).
+ax_3 : (x : El nat) -> (y : El nat) -> (z : El nat) -> 
+        Prf (geq x y) -> Prf (geq y z) -> Prf (geq x z).
+
+rec : (P : (El nat -> El o)) -> 
+        Prf (P 0) -> 
+        ((x : El nat) -> Prf (P x) -> Prf (P (succ x))) ->
+        (x : El nat) -> Prf (P x).
+
+thm thm1 : (x : El nat) -> Prf (geq x 0)
+  := x => rec 
+    (z => geq z 0) 
+    (ax_1 0)
+    (x => Px => ax_3 (succ x) x 0 (ax_2 x) Px)
+    x.
+
+thm thm2 : (x : El nat) -> Prf (geq (succ x) 0)
+  := x => ax_3 (succ x) x 0 (ax_2 x) (thm1 x).

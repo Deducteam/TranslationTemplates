@@ -1,0 +1,9 @@
+tp : Type.
+arr : tp -> tp -> tp.
+tm : Type.
+lam : (tm -> tm) -> tm.
+app : tm -> tm -> tm.
+
+oftype : tm -> tp -> Type.
+oftype_lam : A : tp -> B : tp -> f : (tm -> tm) -> (x : tm -> (oftype x A) -> (oftype (f x) B)) -> (oftype (lam f) (arr A B)).
+oftype_app : A : tp -> B : tp -> f : tm -> x : tm -> (oftype f (arr A B)) -> (oftype x A) -> (oftype (app f x) B).

@@ -1,0 +1,630 @@
+#REQUIRE unsorted.
+
+unit : Type.
+star : unit.
+repl : x : unit -> y : unit -> P : (unit -> unsorted.Prop) -> unsorted.Prf (P x) -> unsorted.Prf (P y).
+
+def Set_m : Type := unit.
+
+def Set_r : Set_m -> Type := z => unsorted.tm -> unsorted.Prop.
+
+def El_m :
+  h:Set_m -> h':(Set_r h) -> Type
+  :=
+  h => h' => unsorted.tm.
+
+def El_r :
+  h:Set_m -> h':(Set_r h) -> (El_m h h') -> Type
+  :=
+  h => h' => z => unsorted.Prf (h' z).
+
+def Prop_m : Type := unsorted.Prop.
+
+def Prop_r : Prop_m -> Type := p => unit.
+
+def Prf_m :
+  h:Prop_m -> h':(Prop_r h) -> Type
+  :=
+  h => h' => unsorted.Prf h.
+
+def Prf_r :
+  h:Prop_m -> h':(Prop_r h) -> (Prf_m h h') -> Type
+  :=
+  h => h' => z => unit.
+
+def impd_m :
+  p:Prop_m ->
+  p':(Prop_r p) ->
+  h:(h:(Prf_m p p') -> h':(Prf_r p p' h) -> Prop_m) ->
+  h':((f:(h0:(Prf_m p p') ->
+          h':(Prf_r p p' h0) -> Prop_m) =>
+       h0:(Prf_m p p') ->
+       h':(Prf_r p p' h0) -> Prop_r (f h0 h'))
+        h) ->
+  Prop_m
+  :=
+  p => p' => h => h' => unsorted.impd p (z => h z star).
+
+def impd_r :
+  (f:(p:Prop_m ->
+      p':(Prop_r p) ->
+      h:(h:(Prf_m p p') ->
+         h':(Prf_r p p' h) -> Prop_m) ->
+      h':((f:(h0:(Prf_m p p') ->
+              h':(Prf_r p p' h0) -> Prop_m) =>
+           h0:(Prf_m p p') ->
+           h':(Prf_r p p' h0) -> Prop_r (f h0 h'))
+            h) ->
+      Prop_m) =>
+   p:Prop_m ->
+   p':(Prop_r p) ->
+   (f0:(h:(h:(Prf_m p p') ->
+           h':(Prf_r p p' h) -> Prop_m) ->
+        h':((f0:(h0:(Prf_m p p') ->
+                 h':(Prf_r p p' h0) -> Prop_m) =>
+             h0:(Prf_m p p') ->
+             h':(Prf_r p p' h0) -> Prop_r (f0 h0 h'))
+              h) ->
+        Prop_m) =>
+    h:(h:(Prf_m p p') ->
+       h':(Prf_r p p' h) -> Prop_m) ->
+    h':((f1:(h0:(Prf_m p p') ->
+             h':(Prf_r p p' h0) -> Prop_m) =>
+         h0:(Prf_m p p') ->
+         h':(Prf_r p p' h0) -> Prop_r (f1 h0 h'))
+          h) ->
+    Prop_r (f0 h h'))
+     (f p p'))
+    impd_m
+  :=
+  p => p' => h => h' => star.
+
+def impd_i_m :
+  p:Prop_m ->
+  p':(Prop_r p) ->
+  q:(h:(Prf_m p p') -> h':(Prf_r p p' h) -> Prop_m) ->
+  q':((f:(h:(Prf_m p p') ->
+          h':(Prf_r p p' h) -> Prop_m) =>
+       h:(Prf_m p p') ->
+       h':(Prf_r p p' h) -> Prop_r (f h h'))
+        q) ->
+  h:(z:(Prf_m p p') ->
+     z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) ->
+  h':((f:(z:(Prf_m p p') ->
+          z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+       z:(Prf_m p p') ->
+       z':(Prf_r p p' z) -> Prf_r (q z z') (q' z z') (f z z'))
+        h) ->
+  Prf_m (impd_m p p' q q') (impd_r p p' q q')
+  :=
+  p => p' => q => q' => h => h' => 
+  unsorted.impd_i p (h => q h star) (z => h z star).
+
+def impd_i_r :
+  (f:(p:Prop_m ->
+      p':(Prop_r p) ->
+      q:(h:(Prf_m p p') ->
+         h':(Prf_r p p' h) -> Prop_m) ->
+      q':((f:(h:(Prf_m p p') ->
+              h':(Prf_r p p' h) -> Prop_m) =>
+           h:(Prf_m p p') ->
+           h':(Prf_r p p' h) -> Prop_r (f h h'))
+            q) ->
+      h:(z:(Prf_m p p') ->
+         z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) ->
+      h':((f:(z:(Prf_m p p') ->
+              z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+           z:(Prf_m p p') ->
+           z':(Prf_r p p' z) ->
+           Prf_r (q z z') (q' z z') (f z z'))
+            h) ->
+      Prf_m
+        (impd_m p p' q q')
+        (impd_r p p' q q')) =>
+   p:Prop_m ->
+   p':(Prop_r p) ->
+   (f0:(q:(h:(Prf_m p p') ->
+           h':(Prf_r p p' h) -> Prop_m) ->
+        q':((f0:(h:(Prf_m p p') ->
+                 h':(Prf_r p p' h) -> Prop_m) =>
+             h:(Prf_m p p') ->
+             h':(Prf_r p p' h) -> Prop_r (f0 h h'))
+              q) ->
+        h:(z:(Prf_m p p') ->
+           z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) ->
+        h':((f0:(z:(Prf_m p p') ->
+                 z':(Prf_r p p' z) ->
+                 Prf_m (q z z') (q' z z')) =>
+             z:(Prf_m p p') ->
+             z':(Prf_r p p' z) ->
+             Prf_r (q z z') (q' z z') (f0 z z'))
+              h) ->
+        Prf_m
+          (impd_m p p' q q')
+          (impd_r p p' q q')) =>
+    q:(h:(Prf_m p p') ->
+       h':(Prf_r p p' h) -> Prop_m) ->
+    q':((f1:(h:(Prf_m p p') ->
+             h':(Prf_r p p' h) -> Prop_m) =>
+         h:(Prf_m p p') ->
+         h':(Prf_r p p' h) -> Prop_r (f1 h h'))
+          q) ->
+    (f1:(h:(z:(Prf_m p p') ->
+            z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) ->
+         h':((f1:(z:(Prf_m p p') ->
+                  z':(Prf_r p p' z) ->
+                  Prf_m (q z z') (q' z z')) =>
+              z:(Prf_m p p') ->
+              z':(Prf_r p p' z) ->
+              Prf_r (q z z') (q' z z') (f1 z z'))
+               h) ->
+         Prf_m
+           (impd_m p p' q q')
+           (impd_r p p' q q')) =>
+     h:(z:(Prf_m p p') ->
+        z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) ->
+     h':((f2:(z:(Prf_m p p') ->
+              z':(Prf_r p p' z) ->
+              Prf_m (q z z') (q' z z')) =>
+          z:(Prf_m p p') ->
+          z':(Prf_r p p' z) ->
+          Prf_r (q z z') (q' z z') (f2 z z'))
+           h) ->
+     Prf_r
+       (impd_m p p' q q')
+       (impd_r p p' q q')
+       (f1 h h'))
+      (f0 q q'))
+     (f p p'))
+    impd_i_m
+  :=
+  p => p' => q => q' => h => h' => star.
+
+def impd_e_m :
+  p:Prop_m ->
+  p':(Prop_r p) ->
+  q:(h:(Prf_m p p') -> h':(Prf_r p p' h) -> Prop_m) ->
+  q':((f:(h:(Prf_m p p') ->
+          h':(Prf_r p p' h) -> Prop_m) =>
+       h:(Prf_m p p') ->
+       h':(Prf_r p p' h) -> Prop_r (f h h'))
+        q) ->
+  h:(Prf_m (impd_m p p' q q') (impd_r p p' q q')) ->
+  h':(Prf_r (impd_m p p' q q') (impd_r p p' q q') h) ->
+  z:(Prf_m p p') ->
+  z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')
+  :=
+  p => p' => q => q' => h => h' => z => z' =>
+  repl star z' (w => q z w) (unsorted.impd_e p (h => q h star) h z).
+
+def impd_e_r :
+  (f:(p:Prop_m ->
+      p':(Prop_r p) ->
+      q:(h:(Prf_m p p') ->
+         h':(Prf_r p p' h) -> Prop_m) ->
+      q':((f:(h:(Prf_m p p') ->
+              h':(Prf_r p p' h) -> Prop_m) =>
+           h:(Prf_m p p') ->
+           h':(Prf_r p p' h) -> Prop_r (f h h'))
+            q) ->
+      h:(Prf_m
+           (impd_m p p' q q')
+           (impd_r p p' q q')) ->
+      h':(Prf_r
+            (impd_m p p' q q')
+            (impd_r p p' q q')
+            h) ->
+      z:(Prf_m p p') ->
+      z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+   p:Prop_m ->
+   p':(Prop_r p) ->
+   (f0:(q:(h:(Prf_m p p') ->
+           h':(Prf_r p p' h) -> Prop_m) ->
+        q':((f0:(h:(Prf_m p p') ->
+                 h':(Prf_r p p' h) -> Prop_m) =>
+             h:(Prf_m p p') ->
+             h':(Prf_r p p' h) -> Prop_r (f0 h h'))
+              q) ->
+        h:(Prf_m
+             (impd_m p p' q q')
+             (impd_r p p' q q')) ->
+        h':(Prf_r
+              (impd_m p p' q q')
+              (impd_r p p' q q')
+              h) ->
+        z:(Prf_m p p') ->
+        z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+    q:(h:(Prf_m p p') ->
+       h':(Prf_r p p' h) -> Prop_m) ->
+    q':((f1:(h:(Prf_m p p') ->
+             h':(Prf_r p p' h) -> Prop_m) =>
+         h:(Prf_m p p') ->
+         h':(Prf_r p p' h) -> Prop_r (f1 h h'))
+          q) ->
+    (f1:(h:(Prf_m
+              (impd_m p p' q q')
+              (impd_r p p' q q')) ->
+         h':(Prf_r
+               (impd_m p p' q q')
+               (impd_r p p' q q')
+               h) ->
+         z:(Prf_m p p') ->
+         z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+     h:(Prf_m
+          (impd_m p p' q q')
+          (impd_r p p' q q')) ->
+     h':(Prf_r
+           (impd_m p p' q q')
+           (impd_r p p' q q')
+           h) ->
+     (f2:(z:(Prf_m p p') ->
+          z':(Prf_r p p' z) -> Prf_m (q z z') (q' z z')) =>
+      z:(Prf_m p p') ->
+      z':(Prf_r p p' z) ->
+      Prf_r (q z z') (q' z z') (f2 z z'))
+       (f1 h h'))
+      (f0 q q'))
+     (f p p'))
+    impd_e_m
+  :=
+  p => p' => q => q' => h => h' => z => z' => star.
+
+def all_m :
+  a:Set_m ->
+  a':(Set_r a) ->
+  h:(h:(El_m a a') -> h':(El_r a a' h) -> Prop_m) ->
+  h':((f:(h0:(El_m a a') ->
+          h':(El_r a a' h0) -> Prop_m) =>
+       h0:(El_m a a') ->
+       h':(El_r a a' h0) -> Prop_r (f h0 h'))
+        h) ->
+  Prop_m
+  :=
+  a => a' => h => h' => unsorted.all (x => unsorted.impd (a' x) (h x)).
+
+def all_r :
+  (f:(a:Set_m ->
+      a':(Set_r a) ->
+      h:(h:(El_m a a') ->
+         h':(El_r a a' h) -> Prop_m) ->
+      h':((f:(h0:(El_m a a') ->
+              h':(El_r a a' h0) -> Prop_m) =>
+           h0:(El_m a a') ->
+           h':(El_r a a' h0) -> Prop_r (f h0 h'))
+            h) ->
+      Prop_m) =>
+   a:Set_m ->
+   a':(Set_r a) ->
+   (f0:(h:(h:(El_m a a') ->
+           h':(El_r a a' h) -> Prop_m) ->
+        h':((f0:(h0:(El_m a a') ->
+                 h':(El_r a a' h0) -> Prop_m) =>
+             h0:(El_m a a') ->
+             h':(El_r a a' h0) -> Prop_r (f0 h0 h'))
+              h) ->
+        Prop_m) =>
+    h:(h:(El_m a a') ->
+       h':(El_r a a' h) -> Prop_m) ->
+    h':((f1:(h0:(El_m a a') ->
+             h':(El_r a a' h0) -> Prop_m) =>
+         h0:(El_m a a') ->
+         h':(El_r a a' h0) -> Prop_r (f1 h0 h'))
+          h) ->
+    Prop_r (f0 h h'))
+     (f a a'))
+    all_m
+  :=
+  a => a' => h => h' => star.
+
+def all_i_m :
+  a:Set_m ->
+  a':(Set_r a) ->
+  p:(h:(El_m a a') -> h':(El_r a a' h) -> Prop_m) ->
+  p':((f:(h:(El_m a a') ->
+          h':(El_r a a' h) -> Prop_m) =>
+       h:(El_m a a') ->
+       h':(El_r a a' h) -> Prop_r (f h h'))
+        p) ->
+  h:(x:(El_m a a') ->
+     x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) ->
+  h':((f:(x:(El_m a a') ->
+          x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+       x:(El_m a a') ->
+       x':(El_r a a' x) -> Prf_r (p x x') (p' x x') (f x x'))
+        h) ->
+  Prf_m (all_m a a' p p') (all_r a a' p p')
+  :=
+  a => a' => p => p' => h => h' =>
+  unsorted.all_i 
+    (x => unsorted.impd (a' x) (p x))
+    (x => unsorted.impd_i (a' x) (p x) (z => h x z)).
+
+def all_i_r :
+  (f:(a:Set_m ->
+      a':(Set_r a) ->
+      p:(h:(El_m a a') ->
+         h':(El_r a a' h) -> Prop_m) ->
+      p':((f:(h:(El_m a a') ->
+              h':(El_r a a' h) -> Prop_m) =>
+           h:(El_m a a') ->
+           h':(El_r a a' h) -> Prop_r (f h h'))
+            p) ->
+      h:(x:(El_m a a') ->
+         x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) ->
+      h':((f:(x:(El_m a a') ->
+              x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+           x:(El_m a a') ->
+           x':(El_r a a' x) ->
+           Prf_r (p x x') (p' x x') (f x x'))
+            h) ->
+      Prf_m (all_m a a' p p') (all_r a a' p p')) =>
+   a:Set_m ->
+   a':(Set_r a) ->
+   (f0:(p:(h:(El_m a a') ->
+           h':(El_r a a' h) -> Prop_m) ->
+        p':((f0:(h:(El_m a a') ->
+                 h':(El_r a a' h) -> Prop_m) =>
+             h:(El_m a a') ->
+             h':(El_r a a' h) -> Prop_r (f0 h h'))
+              p) ->
+        h:(x:(El_m a a') ->
+           x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) ->
+        h':((f0:(x:(El_m a a') ->
+                 x':(El_r a a' x) ->
+                 Prf_m (p x x') (p' x x')) =>
+             x:(El_m a a') ->
+             x':(El_r a a' x) ->
+             Prf_r (p x x') (p' x x') (f0 x x'))
+              h) ->
+        Prf_m
+          (all_m a a' p p')
+          (all_r a a' p p')) =>
+    p:(h:(El_m a a') ->
+       h':(El_r a a' h) -> Prop_m) ->
+    p':((f1:(h:(El_m a a') ->
+             h':(El_r a a' h) -> Prop_m) =>
+         h:(El_m a a') ->
+         h':(El_r a a' h) -> Prop_r (f1 h h'))
+          p) ->
+    (f1:(h:(x:(El_m a a') ->
+            x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) ->
+         h':((f1:(x:(El_m a a') ->
+                  x':(El_r a a' x) ->
+                  Prf_m (p x x') (p' x x')) =>
+              x:(El_m a a') ->
+              x':(El_r a a' x) ->
+              Prf_r (p x x') (p' x x') (f1 x x'))
+               h) ->
+         Prf_m
+           (all_m a a' p p')
+           (all_r a a' p p')) =>
+     h:(x:(El_m a a') ->
+        x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) ->
+     h':((f2:(x:(El_m a a') ->
+              x':(El_r a a' x) ->
+              Prf_m (p x x') (p' x x')) =>
+          x:(El_m a a') ->
+          x':(El_r a a' x) ->
+          Prf_r (p x x') (p' x x') (f2 x x'))
+           h) ->
+     Prf_r
+       (all_m a a' p p')
+       (all_r a a' p p')
+       (f1 h h'))
+      (f0 p p'))
+     (f a a'))
+    all_i_m
+  :=
+  a => a' => p => p' => h => h' => star.
+
+def all_e_m :
+  a:Set_m ->
+  a':(Set_r a) ->
+  p:(h:(El_m a a') -> h':(El_r a a' h) -> Prop_m) ->
+  p':((f:(h:(El_m a a') ->
+          h':(El_r a a' h) -> Prop_m) =>
+       h:(El_m a a') ->
+       h':(El_r a a' h) -> Prop_r (f h h'))
+        p) ->
+  h:(Prf_m (all_m a a' p p') (all_r a a' p p')) ->
+  h':(Prf_r (all_m a a' p p') (all_r a a' p p') h) ->
+  x:(El_m a a') ->
+  x':(El_r a a' x) -> Prf_m (p x x') (p' x x')
+  :=
+  a => a' => p => p' => h => h' => x => x' =>
+  unsorted.impd_e 
+    (a' x) 
+    (p x) 
+    (unsorted.all_e (x => unsorted.impd (a' x) (p x)) h x)
+    x'.
+
+def all_e_r :
+  (f:(a:Set_m ->
+      a':(Set_r a) ->
+      p:(h:(El_m a a') ->
+         h':(El_r a a' h) -> Prop_m) ->
+      p':((f:(h:(El_m a a') ->
+              h':(El_r a a' h) -> Prop_m) =>
+           h:(El_m a a') ->
+           h':(El_r a a' h) -> Prop_r (f h h'))
+            p) ->
+      h:(Prf_m
+           (all_m a a' p p')
+           (all_r a a' p p')) ->
+      h':(Prf_r
+            (all_m a a' p p')
+            (all_r a a' p p')
+            h) ->
+      x:(El_m a a') ->
+      x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+   a:Set_m ->
+   a':(Set_r a) ->
+   (f0:(p:(h:(El_m a a') ->
+           h':(El_r a a' h) -> Prop_m) ->
+        p':((f0:(h:(El_m a a') ->
+                 h':(El_r a a' h) -> Prop_m) =>
+             h:(El_m a a') ->
+             h':(El_r a a' h) -> Prop_r (f0 h h'))
+              p) ->
+        h:(Prf_m
+             (all_m a a' p p')
+             (all_r a a' p p')) ->
+        h':(Prf_r
+              (all_m a a' p p')
+              (all_r a a' p p')
+              h) ->
+        x:(El_m a a') ->
+        x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+    p:(h:(El_m a a') ->
+       h':(El_r a a' h) -> Prop_m) ->
+    p':((f1:(h:(El_m a a') ->
+             h':(El_r a a' h) -> Prop_m) =>
+         h:(El_m a a') ->
+         h':(El_r a a' h) -> Prop_r (f1 h h'))
+          p) ->
+    (f1:(h:(Prf_m
+              (all_m a a' p p')
+              (all_r a a' p p')) ->
+         h':(Prf_r
+               (all_m a a' p p')
+               (all_r a a' p p')
+               h) ->
+         x:(El_m a a') ->
+         x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+     h:(Prf_m
+          (all_m a a' p p')
+          (all_r a a' p p')) ->
+     h':(Prf_r
+           (all_m a a' p p')
+           (all_r a a' p p')
+           h) ->
+     (f2:(x:(El_m a a') ->
+          x':(El_r a a' x) -> Prf_m (p x x') (p' x x')) =>
+      x:(El_m a a') ->
+      x':(El_r a a' x) ->
+      Prf_r (p x x') (p' x x') (f2 x x'))
+       (f1 h h'))
+      (f0 p p'))
+     (f a a'))
+    all_e_m
+  :=
+  a => a' => p => p' => h => h' => x => x' => star.
+
+def human_m : Set_m := star.
+
+def human_r :
+  Set_r human_m
+  :=
+  unsorted.is_human.
+
+def cat_m : Set_m := star.
+
+def cat_r : Set_r cat_m := unsorted.is_cat.
+
+def pet_m :
+  h:(El_m human_m human_r) ->
+  h':(El_r human_m human_r h) ->
+  h0:(El_m cat_m cat_r) ->
+  h'0:(El_r cat_m cat_r h0) -> Prop_m
+  :=
+  h => h' => h0 => h'0 => unsorted.pet h h0.
+
+def pet_r :
+  (f:(h:(El_m human_m human_r) ->
+      h':(El_r human_m human_r h) ->
+      h0:(El_m cat_m cat_r) ->
+      h'0:(El_r cat_m cat_r h0) ->
+      Prop_m) =>
+   h:(El_m human_m human_r) ->
+   h':(El_r human_m human_r h) ->
+   (f0:(h0:(El_m cat_m cat_r) ->
+        h'0:(El_r cat_m cat_r h0) ->
+        Prop_m) =>
+    h0:(El_m cat_m cat_r) ->
+    h'0:(El_r cat_m cat_r h0) ->
+    Prop_r (f0 h0 h'0))
+     (f h h'))
+    pet_m
+  :=
+  h => h' => h0 => h'0 => star.
+
+def purr_m :
+  h:(El_m cat_m cat_r) ->
+  h':(El_r cat_m cat_r h) -> Prop_m
+  :=
+  h => h' => unsorted.purr h.
+
+def purr_r :
+  (f:(h:(El_m cat_m cat_r) ->
+      h':(El_r cat_m cat_r h) ->
+      Prop_m) =>
+   h:(El_m cat_m cat_r) ->
+   h':(El_r cat_m cat_r h) ->
+   Prop_r (f h h'))
+    purr_m
+  :=
+  h => h' => star.
+
+def ax_m :
+  h:(El_m human_m human_r) ->
+  h':(El_r human_m human_r h) ->
+  c:(El_m cat_m cat_r) ->
+  c':(El_r cat_m cat_r c) ->
+  h0:(Prf_m (pet_m h h' c c') (pet_r h h' c c')) ->
+  h'0:(Prf_r (pet_m h h' c c') (pet_r h h' c c') h0) ->
+  Prf_m (purr_m c c') (purr_r c c')
+  :=
+  h => h' => c => c' => h0 => h'0 => unsorted.ax h c h' c' h0.
+
+def ax_r :
+  (f:(h:(El_m human_m human_r) ->
+      h':(El_r human_m human_r h) ->
+      c:(El_m cat_m cat_r) ->
+      c':(El_r cat_m cat_r c) ->
+      h0:(Prf_m
+            (pet_m h h' c c')
+            (pet_r h h' c c')) ->
+      h'0:(Prf_r
+             (pet_m h h' c c')
+             (pet_r h h' c c')
+             h0) ->
+      Prf_m (purr_m c c') (purr_r c c')) =>
+   h:(El_m human_m human_r) ->
+   h':(El_r human_m human_r h) ->
+   (f0:(c:(El_m cat_m cat_r) ->
+        c':(El_r cat_m cat_r c) ->
+        h0:(Prf_m
+              (pet_m h h' c c')
+              (pet_r h h' c c')) ->
+        h'0:(Prf_r
+               (pet_m h h' c c')
+               (pet_r h h' c c')
+               h0) ->
+        Prf_m (purr_m c c') (purr_r c c')) =>
+    c:(El_m cat_m cat_r) ->
+    c':(El_r cat_m cat_r c) ->
+    (f1:(h0:(Prf_m
+               (pet_m h h' c c')
+               (pet_r h h' c c')) ->
+         h'0:(Prf_r
+                (pet_m h h' c c')
+                (pet_r h h' c c')
+                h0) ->
+         Prf_m (purr_m c c') (purr_r c c')) =>
+     h0:(Prf_m
+           (pet_m h h' c c')
+           (pet_r h h' c c')) ->
+     h'0:(Prf_r
+            (pet_m h h' c c')
+            (pet_r h h' c c')
+            h0) ->
+     Prf_r
+       (purr_m c c')
+       (purr_r c c')
+       (f1 h0 h'0))
+      (f0 c c'))
+     (f h h'))
+    ax_m
+  :=
+  h => h' => c => c' => h0 => h'0 => star.
+

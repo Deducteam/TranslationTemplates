@@ -1,0 +1,922 @@
+#REQUIRE int.
+
+proof_irr : 
+  (p : int.El int.o) -> 
+  (h1 : int.Prf p) -> 
+  (h2 : int.Prf p) -> 
+  (Q : (int.Prf p -> int.El int.o)) -> 
+  int.Prf (Q h1) -> int.Prf (Q h2).
+
+def Set_m : Type := int.Set.
+
+def Set_r : Set_m -> Type := x => (int.El x -> int.El int.o).
+
+def El_m :
+  h:Set_m -> h':(Set_r h) -> Type
+  :=
+  x => x' => int.El x.
+
+def El_r :
+  h:Set_m -> h':(Set_r h) -> (El_m h h') -> Type
+  :=
+  x => x' => u => int.Prf (x' u).
+
+def o_m : Set_m := int.o.
+
+def o_r : Set_r o_m := z => int.impd z (x => z).
+
+def Prf_m :
+  h:(El_m o_m o_r) ->
+  h':(El_r o_m o_r h) -> Type
+  :=
+  x => x' => int.Prf x.
+
+def Prf_r :
+  h:(El_m o_m o_r) ->
+  h':(El_r o_m o_r h) ->
+  (Prf_m h h') -> Type
+  :=
+  x => x' => u => int.Prf x.
+
+def arrd_m :
+  a:Set_m ->
+  a':(Set_r a) ->
+  h:(h:(El_m a a') -> h':(El_r a a' h) -> Set_m) ->
+  h':((f:(h0:(El_m a a') ->
+          h':(El_r a a' h0) -> Set_m) =>
+       h0:(El_m a a') ->
+       h':(El_r a a' h0) -> Set_r (f h0 h'))
+        h) ->
+  Set_m
+  :=
+  a => a' => b => b' =>
+  int.arrd a (x => int.pi (a' x) (b x)).
+
+def arrd_r :
+  (f:(a:Set_m ->
+      a':(Set_r a) ->
+      h:(h:(El_m a a') ->
+         h':(El_r a a' h) -> Set_m) ->
+      h':((f:(h0:(El_m a a') ->
+              h':(El_r a a' h0) -> Set_m) =>
+           h0:(El_m a a') ->
+           h':(El_r a a' h0) -> Set_r (f h0 h'))
+            h) ->
+      Set_m) =>
+   a:Set_m ->
+   a':(Set_r a) ->
+   (f0:(h:(h:(El_m a a') ->
+           h':(El_r a a' h) -> Set_m) ->
+        h':((f0:(h0:(El_m a a') ->
+                 h':(El_r a a' h0) -> Set_m) =>
+             h0:(El_m a a') ->
+             h':(El_r a a' h0) -> Set_r (f0 h0 h'))
+              h) ->
+        Set_m) =>
+    h:(h:(El_m a a') -> h':(El_r a a' h) -> Set_m) ->
+    h':((f1:(h0:(El_m a a') ->
+             h':(El_r a a' h0) -> Set_m) =>
+         h0:(El_m a a') ->
+         h':(El_r a a' h0) -> Set_r (f1 h0 h'))
+          h) ->
+    Set_r (f0 h h'))
+     (f a a'))
+    arrd_m
+  :=
+  a => a' => b => b' => f =>
+  int.fa a (x => int.impd (a' x) (x' => b' x x' (f x x'))).
+
+def impd_m :
+  a:(El_m o_m o_r) ->
+  a':(El_r o_m o_r a) ->
+  h:(h:(Prf_m a a') ->
+     h':(Prf_r a a' h) -> El_m o_m o_r) ->
+  h':((f:(h0:(Prf_m a a') ->
+          h':(Prf_r a a' h0) ->
+          El_m o_m o_r) =>
+       h0:(Prf_m a a') ->
+       h':(Prf_r a a' h0) ->
+       El_r o_m o_r (f h0 h'))
+        h) ->
+  El_m o_m o_r
+  :=
+  a => a' => b => b' =>
+  int.impd a (x => int.impd a (b x)).
+
+def impd_r :
+  (f:(a:(El_m o_m o_r) ->
+      a':(El_r o_m o_r a) ->
+      h:(h:(Prf_m a a') ->
+         h':(Prf_r a a' h) ->
+         El_m o_m o_r) ->
+      h':((f:(h0:(Prf_m a a') ->
+              h':(Prf_r a a' h0) ->
+              El_m o_m o_r) =>
+           h0:(Prf_m a a') ->
+           h':(Prf_r a a' h0) ->
+           El_r o_m o_r (f h0 h'))
+            h) ->
+      El_m o_m o_r) =>
+   a:(El_m o_m o_r) ->
+   a':(El_r o_m o_r a) ->
+   (f0:(h:(h:(Prf_m a a') ->
+           h':(Prf_r a a' h) ->
+           El_m o_m o_r) ->
+        h':((f0:(h0:(Prf_m a a') ->
+                 h':(Prf_r a a' h0) ->
+                 El_m o_m o_r) =>
+             h0:(Prf_m a a') ->
+             h':(Prf_r a a' h0) ->
+             El_r o_m o_r (f0 h0 h'))
+              h) ->
+        El_m o_m o_r) =>
+    h:(h:(Prf_m a a') ->
+       h':(Prf_r a a' h) ->
+       El_m o_m o_r) ->
+    h':((f1:(h0:(Prf_m a a') ->
+             h':(Prf_r a a' h0) ->
+             El_m o_m o_r) =>
+         h0:(Prf_m a a') ->
+         h':(Prf_r a a' h0) ->
+         El_r o_m o_r (f1 h0 h'))
+          h) ->
+    El_r o_m o_r (f0 h h'))
+     (f a a'))
+    impd_m
+  :=
+  a => a' => b => b' => p => p.
+
+def pi_m :
+  a:(El_m o_m o_r) ->
+  a':(El_r o_m o_r a) ->
+  h:(h:(Prf_m a a') -> h':(Prf_r a a' h) -> Set_m) ->
+  h':((f:(h0:(Prf_m a a') ->
+          h':(Prf_r a a' h0) -> Set_m) =>
+       h0:(Prf_m a a') ->
+       h':(Prf_r a a' h0) -> Set_r (f h0 h'))
+        h) ->
+  Set_m
+  :=
+  a => a' => b => b' =>
+  int.pi a (x => int.pi a (b x)).
+
+def pi_r :
+  (f:(a:(El_m o_m o_r) ->
+      a':(El_r o_m o_r a) ->
+      h:(h:(Prf_m a a') ->
+         h':(Prf_r a a' h) -> Set_m) ->
+      h':((f:(h0:(Prf_m a a') ->
+              h':(Prf_r a a' h0) -> Set_m) =>
+           h0:(Prf_m a a') ->
+           h':(Prf_r a a' h0) -> Set_r (f h0 h'))
+            h) ->
+      Set_m) =>
+   a:(El_m o_m o_r) ->
+   a':(El_r o_m o_r a) ->
+   (f0:(h:(h:(Prf_m a a') ->
+           h':(Prf_r a a' h) -> Set_m) ->
+        h':((f0:(h0:(Prf_m a a') ->
+                 h':(Prf_r a a' h0) -> Set_m) =>
+             h0:(Prf_m a a') ->
+             h':(Prf_r a a' h0) -> Set_r (f0 h0 h'))
+              h) ->
+        Set_m) =>
+    h:(h:(Prf_m a a') ->
+       h':(Prf_r a a' h) -> Set_m) ->
+    h':((f1:(h0:(Prf_m a a') ->
+             h':(Prf_r a a' h0) -> Set_m) =>
+         h0:(Prf_m a a') ->
+         h':(Prf_r a a' h0) -> Set_r (f1 h0 h'))
+          h) ->
+    Set_r (f0 h h'))
+     (f a a'))
+    pi_m
+  :=
+  a => a' => b => b' => f =>
+  int.impd a (x => int.impd a (x' => b' x x' (f x x'))).
+
+def fa_m :
+  a:Set_m ->
+  a':(Set_r a) ->
+  h:(h:(El_m a a') ->
+     h':(El_r a a' h) -> El_m o_m o_r) ->
+  h':((f:(h0:(El_m a a') ->
+          h':(El_r a a' h0) ->
+          El_m o_m o_r) =>
+       h0:(El_m a a') ->
+       h':(El_r a a' h0) ->
+       El_r o_m o_r (f h0 h'))
+        h) ->
+  El_m o_m o_r
+  :=
+  a => a' => b => b' =>
+  int.fa a (x => int.impd (a' x) (b x)).
+
+def fa_r :
+  (f:(a:Set_m ->
+      a':(Set_r a) ->
+      h:(h:(El_m a a') ->
+         h':(El_r a a' h) ->
+         El_m o_m o_r) ->
+      h':((f:(h0:(El_m a a') ->
+              h':(El_r a a' h0) ->
+              El_m o_m o_r) =>
+           h0:(El_m a a') ->
+           h':(El_r a a' h0) ->
+           El_r o_m o_r (f h0 h'))
+            h) ->
+      El_m o_m o_r) =>
+   a:Set_m ->
+   a':(Set_r a) ->
+   (f0:(h:(h:(El_m a a') ->
+           h':(El_r a a' h) ->
+           El_m o_m o_r) ->
+        h':((f0:(h0:(El_m a a') ->
+                 h':(El_r a a' h0) ->
+                 El_m o_m o_r) =>
+             h0:(El_m a a') ->
+             h':(El_r a a' h0) ->
+             El_r o_m o_r (f0 h0 h'))
+              h) ->
+        El_m o_m o_r) =>
+    h:(h:(El_m a a') ->
+       h':(El_r a a' h) ->
+       El_m o_m o_r) ->
+    h':((f1:(h0:(El_m a a') ->
+             h':(El_r a a' h0) ->
+             El_m o_m o_r) =>
+         h0:(El_m a a') ->
+         h':(El_r a a' h0) ->
+         El_r o_m o_r (f1 h0 h'))
+          h) ->
+    El_r o_m o_r (f0 h h'))
+     (f a a'))
+    fa_m
+  :=
+  a => a' => b => b' => p => p.
+
+def nat_m : Set_m := int.int.
+
+def nat_r : Set_r nat_m := z => int.geq z int.0.
+
+def 0_m :
+  El_m nat_m nat_r
+  :=
+  int.0.
+
+def 0_r :
+  El_r nat_m nat_r 0_m
+  :=
+  int.ax_1 int.0.
+
+def succ_m :
+  h:(El_m nat_m nat_r) ->
+  h':(El_r nat_m nat_r h) ->
+  El_m nat_m nat_r
+  :=
+  x => x' => int.succ x.
+
+def succ_r :
+  (f:(h:(El_m nat_m nat_r) ->
+      h':(El_r nat_m nat_r h) ->
+      El_m nat_m nat_r) =>
+   h:(El_m nat_m nat_r) ->
+   h':(El_r nat_m nat_r h) ->
+   El_r nat_m nat_r (f h h'))
+    succ_m
+  :=
+  x : int.El int.int => x' : int.Prf (int.geq x int.0) => int.ax_3 (int.succ x) x int.0 (int.ax_2 x) x'.
+
+def geq_m :
+  h:(El_m nat_m nat_r) ->
+  h':(El_r nat_m nat_r h) ->
+  h0:(El_m nat_m nat_r) ->
+  h'0:(El_r nat_m nat_r h0) ->
+  El_m o_m o_r
+  :=
+  x => x' => y => y' => int.geq x y.
+
+def geq_r :
+  (f:(h:(El_m nat_m nat_r) ->
+      h':(El_r nat_m nat_r h) ->
+      h0:(El_m nat_m nat_r) ->
+      h'0:(El_r nat_m nat_r h0) ->
+      El_m o_m o_r) =>
+   h:(El_m nat_m nat_r) ->
+   h':(El_r nat_m nat_r h) ->
+   (f0:(h0:(El_m nat_m nat_r) ->
+        h'0:(El_r nat_m nat_r h0) ->
+        El_m o_m o_r) =>
+    h0:(El_m nat_m nat_r) ->
+    h'0:(El_r nat_m nat_r h0) ->
+    El_r o_m o_r (f0 h0 h'0))
+     (f h h'))
+    geq_m
+  :=
+  x => x' => y => y' => p => p.
+
+def ax_1_m :
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  Prf_m (geq_m x x' x x') (geq_r x x' x x')
+  :=
+  x => x' => int.ax_1 x.
+
+def ax_1_r :
+  (f:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_m (geq_m x x' x x') (geq_r x x' x x')) =>
+   x:(El_m nat_m nat_r) ->
+   x':(El_r nat_m nat_r x) ->
+   Prf_r
+     (geq_m x x' x x')
+     (geq_r x x' x x')
+     (f x x'))
+    ax_1_m
+  :=
+  ax_1_m.
+
+def ax_2_m :
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  Prf_m
+    (geq_m (succ_m x x') (succ_r x x') x x')
+    (geq_r (succ_m x x') (succ_r x x') x x')
+  :=
+  x => x' => int.ax_2 x.
+
+def ax_2_r :
+  (f:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_m
+        (geq_m (succ_m x x') (succ_r x x') x x')
+        (geq_r (succ_m x x') (succ_r x x') x x')) =>
+   x:(El_m nat_m nat_r) ->
+   x':(El_r nat_m nat_r x) ->
+   Prf_r
+     (geq_m (succ_m x x') (succ_r x x') x x')
+     (geq_r (succ_m x x') (succ_r x x') x x')
+     (f x x'))
+    ax_2_m
+  :=
+  ax_2_m.
+
+def ax_3_m :
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  y:(El_m nat_m nat_r) ->
+  y':(El_r nat_m nat_r y) ->
+  z:(El_m nat_m nat_r) ->
+  z':(El_r nat_m nat_r z) ->
+  h:(Prf_m (geq_m x x' y y') (geq_r x x' y y')) ->
+  h':(Prf_r (geq_m x x' y y') (geq_r x x' y y') h) ->
+  h0:(Prf_m (geq_m y y' z z') (geq_r y y' z z')) ->
+  h'0:(Prf_r (geq_m y y' z z') (geq_r y y' z z') h0) ->
+  Prf_m (geq_m x x' z z') (geq_r x x' z z')
+  :=
+  x => x' => y => y' => z => z' => h => h' => h0 => h0' =>
+  int.ax_3 x y z h h0.
+
+def ax_3_r :
+  (f:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      y:(El_m nat_m nat_r) ->
+      y':(El_r nat_m nat_r y) ->
+      z:(El_m nat_m nat_r) ->
+      z':(El_r nat_m nat_r z) ->
+      h:(Prf_m
+           (geq_m x x' y y')
+           (geq_r x x' y y')) ->
+      h':(Prf_r
+            (geq_m x x' y y')
+            (geq_r x x' y y')
+            h) ->
+      h0:(Prf_m
+            (geq_m y y' z z')
+            (geq_r y y' z z')) ->
+      h'0:(Prf_r
+             (geq_m y y' z z')
+             (geq_r y y' z z')
+             h0) ->
+      Prf_m (geq_m x x' z z') (geq_r x x' z z')) =>
+   x:(El_m nat_m nat_r) ->
+   x':(El_r nat_m nat_r x) ->
+   (f0:(y:(El_m nat_m nat_r) ->
+        y':(El_r nat_m nat_r y) ->
+        z:(El_m nat_m nat_r) ->
+        z':(El_r nat_m nat_r z) ->
+        h:(Prf_m
+             (geq_m x x' y y')
+             (geq_r x x' y y')) ->
+        h':(Prf_r
+              (geq_m x x' y y')
+              (geq_r x x' y y')
+              h) ->
+        h0:(Prf_m
+              (geq_m y y' z z')
+              (geq_r y y' z z')) ->
+        h'0:(Prf_r
+               (geq_m y y' z z')
+               (geq_r y y' z z')
+               h0) ->
+        Prf_m
+          (geq_m x x' z z')
+          (geq_r x x' z z')) =>
+    y:(El_m nat_m nat_r) ->
+    y':(El_r nat_m nat_r y) ->
+    (f1:(z:(El_m nat_m nat_r) ->
+         z':(El_r nat_m nat_r z) ->
+         h:(Prf_m
+              (geq_m x x' y y')
+              (geq_r x x' y y')) ->
+         h':(Prf_r
+               (geq_m x x' y y')
+               (geq_r x x' y y')
+               h) ->
+         h0:(Prf_m
+               (geq_m y y' z z')
+               (geq_r y y' z z')) ->
+         h'0:(Prf_r
+                (geq_m y y' z z')
+                (geq_r y y' z z')
+                h0) ->
+         Prf_m
+           (geq_m x x' z z')
+           (geq_r x x' z z')) =>
+     z:(El_m nat_m nat_r) ->
+     z':(El_r nat_m nat_r z) ->
+     (f2:(h:(Prf_m
+               (geq_m x x' y y')
+               (geq_r x x' y y')) ->
+          h':(Prf_r
+                (geq_m x x' y y')
+                (geq_r x x' y y')
+                h) ->
+          h0:(Prf_m
+                (geq_m y y' z z')
+                (geq_r y y' z z')) ->
+          h'0:(Prf_r
+                 (geq_m y y' z z')
+                 (geq_r y y' z z')
+                 h0) ->
+          Prf_m
+            (geq_m x x' z z')
+            (geq_r x x' z z')) =>
+      h:(Prf_m
+           (geq_m x x' y y')
+           (geq_r x x' y y')) ->
+      h':(Prf_r
+            (geq_m x x' y y')
+            (geq_r x x' y y')
+            h) ->
+      (f3:(h0:(Prf_m
+                 (geq_m y y' z z')
+                 (geq_r y y' z z')) ->
+           h'0:(Prf_r
+                  (geq_m y y' z z')
+                  (geq_r y y' z z')
+                  h0) ->
+           Prf_m
+             (geq_m x x' z z')
+             (geq_r x x' z z')) =>
+       h0:(Prf_m
+             (geq_m y y' z z')
+             (geq_r y y' z z')) ->
+       h'0:(Prf_r
+              (geq_m y y' z z')
+              (geq_r y y' z z')
+              h0) ->
+       Prf_r
+         (geq_m x x' z z')
+         (geq_r x x' z z')
+         (f3 h0 h'0))
+        (f2 h h'))
+       (f1 z z'))
+      (f0 y y'))
+     (f x x'))
+    ax_3_m
+  :=
+  ax_3_m.
+
+def rec_m :
+  P:(h:(El_m nat_m nat_r) ->
+     h':(El_r nat_m nat_r h) ->
+     El_m o_m o_r) ->
+  P':((f:(h:(El_m nat_m nat_r) ->
+          h':(El_r nat_m nat_r h) ->
+          El_m o_m o_r) =>
+       h:(El_m nat_m nat_r) ->
+       h':(El_r nat_m nat_r h) ->
+       El_r o_m o_r (f h h'))
+        P) ->
+  h:(Prf_m
+       (P 0_m 0_r)
+       (P' 0_m 0_r)) ->
+  h':(Prf_r
+        (P 0_m 0_r)
+        (P' 0_m 0_r)
+        h) ->
+  h0:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      h0:(Prf_m (P x x') (P' x x')) ->
+      h'0:(Prf_r (P x x') (P' x x') h0) ->
+      Prf_m
+        (P (succ_m x x') (succ_r x x'))
+        (P' (succ_m x x') (succ_r x x'))) ->
+  h'0:((f:(x:(El_m nat_m nat_r) ->
+           x':(El_r nat_m nat_r x) ->
+           h1:(Prf_m (P x x') (P' x x')) ->
+           h'0:(Prf_r (P x x') (P' x x') h1) ->
+           Prf_m
+             (P (succ_m x x') (succ_r x x'))
+             (P' (succ_m x x') (succ_r x x'))) =>
+        x:(El_m nat_m nat_r) ->
+        x':(El_r nat_m nat_r x) ->
+        (f0:(h1:(Prf_m (P x x') (P' x x')) ->
+             h'0:(Prf_r (P x x') (P' x x') h1) ->
+             Prf_m
+               (P (succ_m x x') (succ_r x x'))
+               (P' (succ_m x x') (succ_r x x'))) =>
+         h1:(Prf_m (P x x') (P' x x')) ->
+         h'0:(Prf_r (P x x') (P' x x') h1) ->
+         Prf_r
+           (P (succ_m x x') (succ_r x x'))
+           (P' (succ_m x x') (succ_r x x'))
+           (f0 h1 h'0))
+          (f x x'))
+         h0) ->
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  Prf_m (P x x') (P' x x')
+  :=
+  P => P' => P0 => P0' => IH => IH' => x => x' =>
+  int.rec int.0 
+    (x => int.fa int.o (Q => int.impd (int.impd (int.geq x int.0) (h1 => int.impd (P x h1) (h2 => Q))) (h => Q)))
+    (Q => pQ => pQ 0_r P0) 
+    (x: (int.El int.int) => 
+      h1 : int.Prf (int.geq x int.0) => 
+      h2 : int.Prf (int.fa int.o (Q => int.impd (int.impd (int.geq x int.0) (h1 => int.impd (P x h1) (h2 => Q))) (h => Q))) => 
+      Q => pQ => pQ (succ_r x h1) 
+        (IH x h1 
+          (h2 (P x h1) (ha => hb => proof_irr (int.geq x int.0) ha h1 (h => P x h) hb))
+          (h2 (P x h1) (ha => hb => proof_irr (int.geq x int.0) ha h1 (h => P x h) hb))))
+    x x' (P x x') (ha => hb => proof_irr (int.geq x int.0) ha x' (h => P x h) hb).
+
+def rec_r :
+  (f:(P:(h:(El_m nat_m nat_r) ->
+         h':(El_r nat_m nat_r h) ->
+         El_m o_m o_r) ->
+      P':((f:(h:(El_m nat_m nat_r) ->
+              h':(El_r nat_m nat_r h) ->
+              El_m o_m o_r) =>
+           h:(El_m nat_m nat_r) ->
+           h':(El_r nat_m nat_r h) ->
+           El_r o_m o_r (f h h'))
+            P) ->
+      h:(Prf_m
+           (P 0_m 0_r)
+           (P' 0_m 0_r)) ->
+      h':(Prf_r
+            (P 0_m 0_r)
+            (P' 0_m 0_r)
+            h) ->
+      h0:(x:(El_m nat_m nat_r) ->
+          x':(El_r nat_m nat_r x) ->
+          h0:(Prf_m (P x x') (P' x x')) ->
+          h'0:(Prf_r (P x x') (P' x x') h0) ->
+          Prf_m
+            (P (succ_m x x') (succ_r x x'))
+            (P' (succ_m x x') (succ_r x x'))) ->
+      h'0:((f:(x:(El_m nat_m nat_r) ->
+               x':(El_r nat_m nat_r x) ->
+               h1:(Prf_m (P x x') (P' x x')) ->
+               h'0:(Prf_r (P x x') (P' x x') h1) ->
+               Prf_m
+                 (P (succ_m x x') (succ_r x x'))
+                 (P' (succ_m x x') (succ_r x x'))) =>
+            x:(El_m nat_m nat_r) ->
+            x':(El_r nat_m nat_r x) ->
+            (f0:(h1:(Prf_m (P x x') (P' x x')) ->
+                 h'0:(Prf_r (P x x') (P' x x') h1) ->
+                 Prf_m
+                   (P (succ_m x x') (succ_r x x'))
+                   (P' (succ_m x x') (succ_r x x'))) =>
+             h1:(Prf_m (P x x') (P' x x')) ->
+             h'0:(Prf_r (P x x') (P' x x') h1) ->
+             Prf_r
+               (P (succ_m x x') (succ_r x x'))
+               (P' (succ_m x x') (succ_r x x'))
+               (f0 h1 h'0))
+              (f x x'))
+             h0) ->
+      x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_m (P x x') (P' x x')) =>
+   P:(h:(El_m nat_m nat_r) ->
+      h':(El_r nat_m nat_r h) ->
+      El_m o_m o_r) ->
+   P':((f0:(h:(El_m nat_m nat_r) ->
+            h':(El_r nat_m nat_r h) ->
+            El_m o_m o_r) =>
+        h:(El_m nat_m nat_r) ->
+        h':(El_r nat_m nat_r h) ->
+        El_r o_m o_r (f0 h h'))
+         P) ->
+   (f0:(h:(Prf_m
+             (P 0_m 0_r)
+             (P' 0_m 0_r)) ->
+        h':(Prf_r
+              (P 0_m 0_r)
+              (P' 0_m 0_r)
+              h) ->
+        h0:(x:(El_m nat_m nat_r) ->
+            x':(El_r nat_m nat_r x) ->
+            h0:(Prf_m (P x x') (P' x x')) ->
+            h'0:(Prf_r (P x x') (P' x x') h0) ->
+            Prf_m
+              (P (succ_m x x') (succ_r x x'))
+              (P' (succ_m x x') (succ_r x x'))) ->
+        h'0:((f0:(x:(El_m nat_m nat_r) ->
+                  x':(El_r nat_m nat_r x) ->
+                  h1:(Prf_m (P x x') (P' x x')) ->
+                  h'0:(Prf_r (P x x') (P' x x') h1) ->
+                  Prf_m
+                    (P (succ_m x x') (succ_r x x'))
+                    (P' (succ_m x x') (succ_r x x'))) =>
+              x:(El_m nat_m nat_r) ->
+              x':(El_r nat_m nat_r x) ->
+              (f1:(h1:(Prf_m (P x x') (P' x x')) ->
+                   h'0:(Prf_r (P x x') (P' x x') h1) ->
+                   Prf_m
+                     (P (succ_m x x') (succ_r x x'))
+                     (P' (succ_m x x') (succ_r x x'))) =>
+               h1:(Prf_m (P x x') (P' x x')) ->
+               h'0:(Prf_r (P x x') (P' x x') h1) ->
+               Prf_r
+                 (P (succ_m x x') (succ_r x x'))
+                 (P' (succ_m x x') (succ_r x x'))
+                 (f1 h1 h'0))
+                (f0 x x'))
+               h0) ->
+        x:(El_m nat_m nat_r) ->
+        x':(El_r nat_m nat_r x) ->
+        Prf_m (P x x') (P' x x')) =>
+    h:(Prf_m
+         (P 0_m 0_r)
+         (P' 0_m 0_r)) ->
+    h':(Prf_r
+          (P 0_m 0_r)
+          (P' 0_m 0_r)
+          h) ->
+    (f1:(h0:(x:(El_m nat_m nat_r) ->
+             x':(El_r nat_m nat_r x) ->
+             h0:(Prf_m (P x x') (P' x x')) ->
+             h'0:(Prf_r (P x x') (P' x x') h0) ->
+             Prf_m
+               (P (succ_m x x') (succ_r x x'))
+               (P' (succ_m x x') (succ_r x x'))) ->
+         h'0:((f1:(x:(El_m nat_m nat_r) ->
+                   x':(El_r nat_m nat_r x) ->
+                   h1:(Prf_m (P x x') (P' x x')) ->
+                   h'0:(Prf_r (P x x') (P' x x') h1) ->
+                   Prf_m
+                     (P (succ_m x x') (succ_r x x'))
+                     (P' (succ_m x x') (succ_r x x'))) =>
+               x:(El_m nat_m nat_r) ->
+               x':(El_r nat_m nat_r x) ->
+               (f2:(h1:(Prf_m (P x x') (P' x x')) ->
+                    h'0:(Prf_r (P x x') (P' x x') h1) ->
+                    Prf_m
+                      (P
+                         (succ_m x x')
+                         (succ_r x x'))
+                      (P'
+                         (succ_m x x')
+                         (succ_r x x'))) =>
+                h1:(Prf_m (P x x') (P' x x')) ->
+                h'0:(Prf_r (P x x') (P' x x') h1) ->
+                Prf_r
+                  (P (succ_m x x') (succ_r x x'))
+                  (P' (succ_m x x') (succ_r x x'))
+                  (f2 h1 h'0))
+                 (f1 x x'))
+                h0) ->
+         x:(El_m nat_m nat_r) ->
+         x':(El_r nat_m nat_r x) ->
+         Prf_m (P x x') (P' x x')) =>
+     h0:(x:(El_m nat_m nat_r) ->
+         x':(El_r nat_m nat_r x) ->
+         h0:(Prf_m (P x x') (P' x x')) ->
+         h'0:(Prf_r (P x x') (P' x x') h0) ->
+         Prf_m
+           (P (succ_m x x') (succ_r x x'))
+           (P' (succ_m x x') (succ_r x x'))) ->
+     h'0:((f2:(x:(El_m nat_m nat_r) ->
+               x':(El_r nat_m nat_r x) ->
+               h1:(Prf_m (P x x') (P' x x')) ->
+               h'0:(Prf_r (P x x') (P' x x') h1) ->
+               Prf_m
+                 (P (succ_m x x') (succ_r x x'))
+                 (P' (succ_m x x') (succ_r x x'))) =>
+           x:(El_m nat_m nat_r) ->
+           x':(El_r nat_m nat_r x) ->
+           (f3:(h1:(Prf_m (P x x') (P' x x')) ->
+                h'0:(Prf_r (P x x') (P' x x') h1) ->
+                Prf_m
+                  (P (succ_m x x') (succ_r x x'))
+                  (P' (succ_m x x') (succ_r x x'))) =>
+            h1:(Prf_m (P x x') (P' x x')) ->
+            h'0:(Prf_r (P x x') (P' x x') h1) ->
+            Prf_r
+              (P (succ_m x x') (succ_r x x'))
+              (P' (succ_m x x') (succ_r x x'))
+              (f3 h1 h'0))
+             (f2 x x'))
+            h0) ->
+     (f2:(x:(El_m nat_m nat_r) ->
+          x':(El_r nat_m nat_r x) ->
+          Prf_m (P x x') (P' x x')) =>
+      x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_r (P x x') (P' x x') (f2 x x'))
+       (f1 h0 h'0))
+      (f0 h h'))
+     (f P P'))
+    rec_m
+  :=
+  rec_m.
+
+thm thm1_m :
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  Prf_m
+    (geq_m x x' 0_m 0_r)
+    (geq_r x x' 0_m 0_r)
+  :=
+  x =>
+  x' =>
+  rec_m
+    (z => z' => geq_m z z' 0_m 0_r)
+    (z => z' => geq_r z z' 0_m 0_r)
+    (ax_1_m 0_m 0_r)
+    (ax_1_r 0_m 0_r)
+    (x0 =>
+     x'0 =>
+     Px =>
+     Px' =>
+     ax_3_m
+       (succ_m x0 x'0)
+       (succ_r x0 x'0)
+       x0
+       x'0
+       0_m
+       0_r
+       (ax_2_m x0 x'0)
+       (ax_2_r x0 x'0)
+       Px
+       Px')
+    (x0 =>
+     x'0 =>
+     Px =>
+     Px' =>
+     ax_3_r
+       (succ_m x0 x'0)
+       (succ_r x0 x'0)
+       x0
+       x'0
+       0_m
+       0_r
+       (ax_2_m x0 x'0)
+       (ax_2_r x0 x'0)
+       Px
+       Px')
+    x
+    x'.
+
+thm thm1_r :
+  (f:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_m
+        (geq_m x x' 0_m 0_r)
+        (geq_r x x' 0_m 0_r)) =>
+   x:(El_m nat_m nat_r) ->
+   x':(El_r nat_m nat_r x) ->
+   Prf_r
+     (geq_m x x' 0_m 0_r)
+     (geq_r x x' 0_m 0_r)
+     (f x x'))
+    thm1_m
+  :=
+  x =>
+  x' =>
+  rec_r
+    (z => z' => geq_m z z' 0_m 0_r)
+    (z => z' => geq_r z z' 0_m 0_r)
+    (ax_1_m 0_m 0_r)
+    (ax_1_r 0_m 0_r)
+    (x0 =>
+     x'0 =>
+     Px =>
+     Px' =>
+     ax_3_m
+       (succ_m x0 x'0)
+       (succ_r x0 x'0)
+       x0
+       x'0
+       0_m
+       0_r
+       (ax_2_m x0 x'0)
+       (ax_2_r x0 x'0)
+       Px
+       Px')
+    (x0 =>
+     x'0 =>
+     Px =>
+     Px' =>
+     ax_3_r
+       (succ_m x0 x'0)
+       (succ_r x0 x'0)
+       x0
+       x'0
+       0_m
+       0_r
+       (ax_2_m x0 x'0)
+       (ax_2_r x0 x'0)
+       Px
+       Px')
+    x
+    x'.
+
+thm thm2_m :
+  x:(El_m nat_m nat_r) ->
+  x':(El_r nat_m nat_r x) ->
+  Prf_m
+    (geq_m
+       (succ_m x x')
+       (succ_r x x')
+       0_m
+       0_r)
+    (geq_r
+       (succ_m x x')
+       (succ_r x x')
+       0_m
+       0_r)
+  :=
+  x =>
+  x' =>
+  ax_3_m
+    (succ_m x x')
+    (succ_r x x')
+    x
+    x'
+    0_m
+    0_r
+    (ax_2_m x x')
+    (ax_2_r x x')
+    (thm1_m x x')
+    (thm1_r x x').
+
+thm thm2_r :
+  (f:(x:(El_m nat_m nat_r) ->
+      x':(El_r nat_m nat_r x) ->
+      Prf_m
+        (geq_m
+           (succ_m x x')
+           (succ_r x x')
+           0_m
+           0_r)
+        (geq_r
+           (succ_m x x')
+           (succ_r x x')
+           0_m
+           0_r)) =>
+   x:(El_m nat_m nat_r) ->
+   x':(El_r nat_m nat_r x) ->
+   Prf_r
+     (geq_m
+        (succ_m x x')
+        (succ_r x x')
+        0_m
+        0_r)
+     (geq_r
+        (succ_m x x')
+        (succ_r x x')
+        0_m
+        0_r)
+     (f x x'))
+    thm2_m
+  :=
+  x =>
+  x' =>
+  ax_3_r
+    (succ_m x x')
+    (succ_r x x')
+    x
+    x'
+    0_m
+    0_r
+    (ax_2_m x x')
+    (ax_2_r x x')
+    (thm1_m x x')
+    (thm1_r x x').
+

@@ -1,0 +1,180 @@
+#REQUIRE intuitionistic.
+
+def Prop_mu : Type := intuitionistic.Prop.
+
+def Prf_mu : Prop_mu -> Type := p => intuitionistic.Prf (intuitionistic.not (intuitionistic.not p)).
+
+def Set_mu : Type := intuitionistic.Set.
+
+def El_mu : Set_mu -> Type := intuitionistic.El.
+
+def o_mu : Set_mu := intuitionistic.o.
+
+def arr_mu :
+  Set_mu -> Set_mu -> Set_mu
+  :=
+  intuitionistic.arr.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  intuitionistic.imp.
+
+def and_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  intuitionistic.and.
+
+def or_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  intuitionistic.or.
+
+def top_mu : Prop_mu := intuitionistic.top.
+
+def bot_mu : Prop_mu := intuitionistic.bot.
+
+def all_mu :
+  a:Set_mu ->
+  ((El_mu a) -> Prop_mu) -> Prop_mu
+  :=
+  a => p => intuitionistic.all a (x => intuitionistic.not (intuitionistic.not (p x))).
+
+def ex_mu :
+  a:Set_mu ->
+  ((El_mu a) -> Prop_mu) -> Prop_mu
+  :=
+  intuitionistic.ex.
+
+def not_mu :
+  Prop_mu -> Prop_mu
+  :=
+  intuitionistic.not.
+
+def imp_i_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu q) ->
+  Prf_mu (imp_mu p q)
+  :=
+  intuitionistic.imp_i_i.
+
+def imp_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (imp_mu p q)) ->
+  (Prf_mu p) -> Prf_mu q
+  :=
+  intuitionistic.imp_e_i.
+
+def and_i_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (and_mu p q)
+  :=
+  intuitionistic.and_i_i.
+
+def and_el_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu p
+  :=
+  intuitionistic.and_el_i.
+
+def and_er_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu q
+  :=
+  intuitionistic.and_er_i.
+
+def or_il_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu -> Prf_mu (or_mu p q)
+  :=
+  intuitionistic.or_il_i.
+
+def or_ir_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (or_mu p q)
+  :=
+  intuitionistic.or_ir_i.
+
+def or_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (or_mu p q)) ->
+  r:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu r) ->
+  ((Prf_mu q) -> Prf_mu r) -> Prf_mu r
+  :=
+  intuitionistic.or_e_i.
+
+def neg_i_mu :
+  p:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu bot_mu) ->
+  Prf_mu (not_mu p)
+  :=
+  intuitionistic.neg_i_i.
+
+def neg_e_mu :
+  p:Prop_mu ->
+  (Prf_mu (not_mu p)) ->
+  (Prf_mu p) -> Prf_mu bot_mu
+  :=
+  intuitionistic.neg_e_i.
+
+def top_i_mu :
+  Prf_mu top_mu
+  :=
+  intuitionistic.top_i_i.
+
+def bot_e_mu :
+  (Prf_mu bot_mu) ->
+  p:Prop_mu -> Prf_mu p
+  :=
+  intuitionistic.bot_e_i.
+
+def all_i_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  (x:(El_mu a) -> Prf_mu (p x)) ->
+  Prf_mu (all_mu a p)
+  :=
+  intuitionistic.all_i_i.
+
+def all_e_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  (Prf_mu (all_mu a p)) ->
+  x:(El_mu a) -> Prf_mu (p x)
+  :=
+  intuitionistic.all_e_i.
+
+def ex_i_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  t:(El_mu a) ->
+  (Prf_mu (p t)) -> Prf_mu (ex_mu a p)
+  :=
+  intuitionistic.ex_i_i.
+
+def ex_e_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  (Prf_mu (ex_mu a p)) ->
+  r:Prop_mu ->
+  (x:(El_mu a) -> (Prf_mu (p x)) -> Prf_mu r) ->
+  Prf_mu r
+  :=
+  intuitionistic.ex_e_i.
+
+def pem_mu :
+  p:Prop_mu ->
+  Prf_mu (or_mu p (not_mu p))
+  :=
+  intuitionistic.pem_i.
+
