@@ -28,10 +28,10 @@ cd TranslationTemplates
 bash translate.sh template source.dk target.dk result.dk
 ```
 where 
-    - `template` indicates the template to use (`morphism`, `relation` or `embedding`)
-    - `source.dk` is the Dedukti file of the source theory
-    - `target.dk` is the Dedukti file of the target theory
-    - `result.dk` is the file containing the output of the translation.
+- `template` indicates the template to use (`morphism`, `relation` or `embedding`)
+- `source.dk` is the Dedukti file of the source theory
+- `target.dk` is the Dedukti file of the target theory
+- `result.dk` is the file containing the output of the translation.
 
 You have to replace the `TODO`s by correct parameters inside `result.dk`. Note that the condition on the rewrite rules is left to be checked by the users.
 
