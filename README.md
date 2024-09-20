@@ -17,21 +17,21 @@ This tool helps users to perform generic translations inside Dedukti. The three 
 
 ## How to use it?
 
-- Clone and enter this repository:
+1. Clone and enter this repository:
 ```
 git clone https://github.com/thomastraversie/TranslationTemplates/
 cd TranslationTemplates
 ```
 
-- To apply a translation template, run 
+2. To apply a translation template, run 
 ```
 bash translate.sh template source.dk target.dk result.dk
 ```
 where 
-    - `template` is `morphism`, `relation` or `embedding`
-    - `source.dk` is the source theory
-    - `target.dk` is the target theory
-    - `result.dk` is the file containing the translation.
+    - `template` indicates the template to use (`morphism`, `relation` or `embedding`)
+    - `source.dk` is the Dedukti file of the source theory
+    - `target.dk` is the Dedukti file of the target theory
+    - `result.dk` is the file containing the output of the translation.
 
 You have to replace the `TODO`s by correct parameters inside `result.dk`. Note that the condition on the rewrite rules is left to be checked by the users.
 
