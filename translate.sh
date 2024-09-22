@@ -37,3 +37,4 @@ dune build
 dune exec -- translation --template $template --source $source_name --target $target_name > $output
 sed -i 's/module_to_erase.//g' $output
 sed -i 's/module_todo.//g' $output
+sed -i "1s/^/#REQUIRE ${target_name}.\n\n/" $output

@@ -89,7 +89,7 @@ def app_rho :
     B:tp_mu ->
     B':(tp_rho B) ->
     (f1:(h:(tm_mu (arr_mu A B)) ->
-         h0:(tm_mu A) -> tm_mu A) =>
+         h0:(tm_mu A) -> tm_mu B) =>
      h:(tm_mu (arr_mu A B)) ->
      h':(tm_rho
            (arr_mu A B)
