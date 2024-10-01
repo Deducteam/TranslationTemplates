@@ -1,7 +1,7 @@
 Prop : Type.
-injective Prf : Prop -> Type.
+def Prf : Prop -> Type.
 Set : Type.
-injective El : Set -> Type.
+El : Set -> Type.
 
 imp : Prop -> Prop -> Prop.
 or : Prop -> Prop -> Prop.

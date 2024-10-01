@@ -1,7 +1,7 @@
 Prop : Type.
-injective Prf : Prop -> Type.
+Prf : Prop -> Type.
 Set : Type.
-injective El : Set -> Type.
+El : Set -> Type.
 
 imp : Prop -> Prop -> Prop.
 or : Prop -> Prop -> Prop.
@@ -12,3 +12,6 @@ imp_e : p : Prop -> q : Prop -> Prf (imp p q) -> Prf p -> Prf q.
 or_il : p : Prop -> Prf p -> q : Prop -> Prf (or p q).
 or_ir : p : Prop ->  q : Prop -> Prf q -> Prf (or p q).
 or_e : p : Prop -> q : Prop -> Prf (or p q) -> r : Prop -> (Prf p -> Prf r) -> (Prf q -> Prf r) -> Prf r.
+
+thm lemma_imp : p : Prop -> Prf (imp p p)
+  := p => imp_i p p (H => H).

@@ -58,3 +58,8 @@ def or_e_mu :
   :=
   p => q => H => H.
 
+thm lemma_imp_mu :
+  p:Prop_mu -> Prf_mu (imp_mu p p)
+  :=
+  p => imp_i_mu p p (H => H).
+
