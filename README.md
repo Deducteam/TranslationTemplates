@@ -19,7 +19,7 @@ This tool helps users to perform generic translations inside Dedukti. The three 
 
 1. Clone and enter this repository:
 ```
-git clone https://github.com/thomastraversie/TranslationTemplates/
+git clone https://github.com/Deducteam/TranslationTemplates
 cd TranslationTemplates
 ```
 
