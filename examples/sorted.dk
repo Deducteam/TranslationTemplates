@@ -1,7 +1,7 @@
 Set : Type.
-injective El : Set -> Type.
+El : Set -> Type.
 Prop : Type.
-injective Prf : Prop -> Type.
+Prf : Prop -> Type.
 
 impd : (p : Prop) -> (Prf p -> Prop) -> Prop.
 impd_i : p : Prop -> q : (Prf p -> Prop) -> (z : Prf p -> Prf (q z)) -> Prf (impd p q).
