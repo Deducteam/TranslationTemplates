@@ -33,7 +33,15 @@ where
 - `target.dk` is the Dedukti file of the target theory
 - `result.dk` is the file containing the output of the translation.
 
-You have to replace the `TODO`s by correct parameters inside `result.dk`. Note that the condition on the rewrite rules is left to be checked by the users.
+You have to replace the `TODO`s by correct parameters inside `result.dk`. 
+
+You can check `result.dk` automatically. As this Dedukti file depends on `target.dk`, we need to generate the object file `target.dko`.
+```
+dk check -e target.dk
+dk check result.dk
+```
+For `result.dk` to typecheck, the conditions on the parameters must be satisfied. 
+The conditions on the constants are checked by Dedukti, but the conditions on the rewrite rules are left to be checked by the users.
 
 
 ## Examples
