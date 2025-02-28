@@ -1,0 +1,46 @@
+#REQUIRE softsorted.
+
+pair : softsorted.Set -> Type.
+def mk_pair : a : softsorted.Set -> x : softsorted.tm -> softsorted.oftype x a -> pair a.
+def fst : a : softsorted.Set -> m : pair a -> softsorted.tm.
+def snd : a : softsorted.Set -> m : pair a -> softsorted.oftype (fst a m) a.
+
+[a, x, h] fst a (mk_pair a x h) --> x.
+[a, x, h] snd a (mk_pair a x h) --> h.
+[a, m] mk_pair a (fst a m) (snd a m) --> m.
+
+def Set_mu : Type := softsorted.Set.
+
+def El_mu : Set_mu -> Type := a => pair a.
+
+def Prop_mu : Type := softsorted.Prop.
+
+def Prf_mu : Prop_mu -> Type := softsorted.Prf.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  softsorted.imp.
+
+def all_mu :
+  a:Set_mu ->
+  ((El_mu a) -> Prop_mu) -> Prop_mu
+  :=
+  a => p => softsorted.all a (x => h => p (mk_pair a x h)).
+
+def all_i_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  (x:(El_mu a) -> Prf_mu (p x)) ->
+  Prf_mu (all_mu a p)
+  :=
+  a => p => H => softsorted.all_i a (x => h => p (mk_pair a x h)) (x => h => H (mk_pair a x h)).
+
+def all_e_mu :
+  a:Set_mu ->
+  p:((El_mu a) -> Prop_mu) ->
+  (Prf_mu (all_mu a p)) ->
+  x:(El_mu a) -> Prf_mu (p x)
+  :=
+  a => p => H => m => softsorted.all_e a (x => h => p (mk_pair a x h)) H (fst a m) (snd a m).
+

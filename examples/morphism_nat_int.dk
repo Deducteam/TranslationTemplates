@@ -1,0 +1,130 @@
+#REQUIRE int.
+
+impd : (p : int.Prop) -> (int.Prf p -> int.Prop) -> int.Prop.
+[p,q] int.Prf (impd p q) --> h : int.Prf p -> int.Prf (q h).
+
+pair : int.Set.
+def mk_pair : x : int.El int.int -> int.Prf (int.geq x int.0) -> int.El pair.
+def fst : int.El pair -> int.El int.int.
+def snd : m : int.El pair -> int.Prf (int.geq (fst m) int.0).
+
+[x, h] fst (mk_pair x h) --> x.
+[x, h] snd (mk_pair x h) --> h.
+[m] mk_pair (fst m) (snd m) --> m.
+
+proof_irr : 
+  (p : int.Prop) -> 
+  (h1 : int.Prf p) -> 
+  (h2 : int.Prf p) -> 
+  (Q : (int.Prf p -> int.Prop)) -> 
+  int.Prf (Q h1) -> int.Prf (Q h2).
+
+def Set_mu : Type := int.Set.
+
+def El_mu : Set_mu -> Type := int.El.
+
+def Prop_mu : Type := int.Prop.
+
+def Prf_mu : Prop_mu -> Type := int.Prf.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  int.imp.
+
+def all_mu :
+  a:Set_mu ->
+  ((El_mu a) -> Prop_mu) -> Prop_mu
+  :=
+  int.all.
+
+def nat_mu : Set_mu := pair.
+
+def 0_mu : El_mu nat_mu := mk_pair int.0 (int.ax_1 int.0).
+
+def succ_mu :
+  (El_mu nat_mu) -> El_mu nat_mu
+  :=
+  m => mk_pair (int.succ (fst m)) (int.ax_3 (int.succ (fst m)) (fst m) int.0 (int.ax_2 (fst m)) (snd m)).
+
+def geq_mu :
+  (El_mu nat_mu) ->
+  (El_mu nat_mu) -> Prop_mu
+  :=
+  m1 => m2 => int.geq (fst m1) (fst m2).
+
+def ax_1_mu :
+  x:(El_mu nat_mu) ->
+  Prf_mu (geq_mu x x)
+  :=
+  m => int.ax_1 (fst m).
+
+def ax_2_mu :
+  x:(El_mu nat_mu) ->
+  Prf_mu (geq_mu (succ_mu x) x)
+  :=
+  m => int.ax_2 (fst m).
+
+def ax_3_mu :
+  x:(El_mu nat_mu) ->
+  y:(El_mu nat_mu) ->
+  z:(El_mu nat_mu) ->
+  (Prf_mu (geq_mu x y)) ->
+  (Prf_mu (geq_mu y z)) ->
+  Prf_mu (geq_mu x z)
+  :=
+  m1 => m2 => m3 => int.ax_3 (fst m1) (fst m2) (fst m3).
+
+def rec_mu :
+  P:((El_mu nat_mu) -> Prop_mu) ->
+  (Prf_mu (P 0_mu)) ->
+  (x:(El_mu nat_mu) ->
+   (Prf_mu (P x)) -> Prf_mu (P (succ_mu x))) ->
+  x:(El_mu nat_mu) -> Prf_mu (P x)
+  :=
+  P => H0 => HR => m => int.rec 
+    int.0
+    (x => impd (int.geq x int.0) (h => P (mk_pair x h)))
+    (h => proof_irr (int.geq int.0 int.0) (int.ax_1 int.0) h (w => P (mk_pair int.0 w)) H0)
+    (x => hx => Hx => hsx => 
+      proof_irr (int.geq (int.succ x) int.0)  
+        (int.ax_3 (int.succ x) x int.0 (int.ax_2 x) hx)
+        hsx
+        (w => P (mk_pair (int.succ x) w))
+        (HR 
+          (mk_pair x hx)
+          (Hx hx)))
+    (fst m)
+    (snd m)
+    (snd m).
+
+thm thm1_mu :
+  x:(El_mu nat_mu) ->
+  Prf_mu (geq_mu x 0_mu)
+  :=
+  x =>
+  rec_mu
+    (z => geq_mu z 0_mu)
+    (ax_1_mu 0_mu)
+    (x0 =>
+     Px =>
+     ax_3_mu
+       (succ_mu x0)
+       x0
+       0_mu
+       (ax_2_mu x0)
+       Px)
+    x.
+
+thm thm2_mu :
+  x:(El_mu nat_mu) ->
+  Prf_mu (geq_mu (succ_mu x) 0_mu)
+  :=
+  x =>
+  ax_3_mu
+    (succ_mu x)
+    x
+    0_mu
+    (ax_2_mu x)
+    (thm1_mu x).
+

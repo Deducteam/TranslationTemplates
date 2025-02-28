@@ -1,0 +1,82 @@
+#REQUIRE mulGr.
+
+def Prop_mu : Type := mulGr.Prop.
+
+def Prf_mu : Prop_mu -> Type := mulGr.Prf.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  mulGr.imp.
+
+def and_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  mulGr.and.
+
+def imp_i_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu q) ->
+  Prf_mu (imp_mu p q)
+  :=
+  mulGr.imp_i.
+
+def imp_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (imp_mu p q)) ->
+  (Prf_mu p) -> Prf_mu q
+  :=
+  mulGr.imp_e.
+
+def and_i_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (and_mu p q)
+  :=
+  mulGr.and_i.
+
+def and_el_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu p
+  :=
+  mulGr.and_el.
+
+def and_er_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu q
+  :=
+  mulGr.and_er.
+
+def i_mu : Type := mulGr.i.
+
+def eq_mu :
+  i_mu -> i_mu -> Prop_mu
+  :=
+  mulGr.eq.
+
+def refl_mu :
+  x:i_mu -> Prf_mu (eq_mu x x)
+  :=
+  mulGr.refl.
+
+def leib_mu :
+  x:i_mu ->
+  y:i_mu ->
+  (Prf_mu (eq_mu x y)) ->
+  P:(i_mu -> Prop_mu) ->
+  (Prf_mu (P x)) -> Prf_mu (P y)
+  :=
+  mulGr.leib.
+
+def div_mu :
+  i_mu -> i_mu -> i_mu
+  :=
+  x => y => mulGr.mul x (mulGr.inv y).
+
+def 1_mu : i_mu := mulGr.1.
+

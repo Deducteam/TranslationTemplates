@@ -4,7 +4,7 @@
 
 This tool helps users to perform generic translations inside Dedukti. The three translation templates are:
 - theory morphisms from a source theory to a target theory [RS13],
-- logical relations between a source theory and a target theory [RS13],
+- logical relations over a theory morphism [RS13],
 - theory embeddings of a source theory into a target theory [Tra24].
 
 
@@ -28,9 +28,9 @@ cd TranslationTemplates
 bash translate.sh template source.dk target.dk result.dk
 ```
 where 
-- `template` indicates the template to use (`morphism`, `relation` or `embedding`)
-- `source.dk` is the Dedukti file of the source theory
-- `target.dk` is the Dedukti file of the target theory
+- `template` indicates the template to use (`morphism`, `relation` or `embedding`),
+- `source.dk` is the Dedukti file of the source theory,
+- `target.dk` is the Dedukti file of the target theory,
 - `result.dk` is the file containing the output of the translation.
 
 You have to replace the `TODO`s by correct parameters inside `result.dk`. 
@@ -47,12 +47,14 @@ The conditions on the constants are checked by Dedukti, but the conditions on th
 ## Examples
 
 You can find several examples of theory morphisms, logical relations and theory embeddings in the folder `examples`. These examples include:
-- a theory morphism between different subsets of connectives
-- a theory morphism and logical relation from the Church to the Curry encoding
-- a theory embedding of natural numbers into integers
-- a theory morphism from classical logic to intuitionistic logic
-- a theory morphism from deduction to computation
-- a theory embedding of sorted logic into unsorted logic.
+- theory morphisms between the multiplicative group and the divisible group,
+- a theory morphism from classical logic to intuitionistic logic,
+- a theory morphism from deduction-style to computation-style,
+- a theory morphism between different subsets of connectives,
+- a theory morphism from hard-sorted logic to soft-sorted logic,
+- a theory morphism from soft-sorted logic to unsorted logic,
+- a theory morphism from natural numbers to integers,
+- a theory morphism and logical relation from the Church to the Curry encoding.
 
 
 ## References

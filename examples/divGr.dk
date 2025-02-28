@@ -1,0 +1,22 @@
+Prop : Type.
+Prf : Prop -> Type.
+imp : Prop -> Prop -> Prop.
+and : Prop -> Prop -> Prop.
+
+imp_i : p : Prop -> q : Prop -> (Prf p -> Prf q) -> Prf (imp p q).
+imp_e : p : Prop -> q : Prop -> Prf (imp p q) -> Prf p -> Prf q.
+and_i : p : Prop -> Prf p -> q : Prop -> Prf q -> Prf (and p q).
+and_el : p : Prop -> q : Prop -> Prf (and p q) -> Prf p.
+and_er : p : Prop -> q : Prop -> Prf (and p q) -> Prf q.
+
+i : Type.
+eq : i -> i -> Prop.
+refl : x : i -> Prf (eq x x).
+leib : x : i -> y : i -> Prf (eq x y) -> P : (i -> Prop) -> Prf (P x) -> Prf (P y).
+
+def div : i -> i -> i.
+1 : i.
+[x,y,z] div (div x y) z --> div x (div y (div 1 z)).
+[x] div 1 (div 1 x) --> x.
+[x] div x 1 --> x.
+[x] div x x --> 1.

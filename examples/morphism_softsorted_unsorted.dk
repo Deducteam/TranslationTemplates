@@ -1,0 +1,49 @@
+#REQUIRE unsorted.
+
+impd : (p : unsorted.Prop) -> (unsorted.Prf p -> unsorted.Prop) -> unsorted.Prop.
+[p,q] unsorted.Prf (impd p q) --> h : unsorted.Prf p -> unsorted.Prf (q h).
+
+def tm_mu : Type := unsorted.tm.
+
+def Set_mu : Type := unsorted.tm -> unsorted.Prop.
+
+def Prop_mu : Type := unsorted.Prop.
+
+def Prf_mu : Prop_mu -> Type := unsorted.Prf.
+
+def oftype_mu :
+  tm_mu -> Set_mu -> Type
+  :=
+  x => a => unsorted.Prf (a x).
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  unsorted.imp.
+
+def all_mu :
+  a:Set_mu ->
+  (x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
+  Prop_mu
+  :=
+  a => p => unsorted.all (x => impd (a x) (h => p x h)).
+
+def all_i_mu :
+  a:Set_mu ->
+  p:(x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
+  (x:tm_mu -> h:(oftype_mu x a) -> Prf_mu (p x h)) ->
+  Prf_mu (all_mu a p)
+  :=
+  a => p => H => unsorted.all_i (x => impd (a x) (h => p x h)) 
+    (x => (h => H x h)).
+
+def all_e_mu :
+  a:Set_mu ->
+  p:(x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
+  (Prf_mu (all_mu a p)) ->
+  x:tm_mu -> h:(oftype_mu x a) -> Prf_mu (p x h)
+  :=
+  a => p => H => x => h => 
+    (unsorted.all_e (x => impd (a x) (h => p x h)) H x)
+    h.
+

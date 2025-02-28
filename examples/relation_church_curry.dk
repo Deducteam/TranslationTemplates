@@ -104,4 +104,3 @@ def app_rho :
     app_mu
   :=
   A => A' => B => B' => f => f' => x => x' => curry.oftype_app A B f x f' x'.
-

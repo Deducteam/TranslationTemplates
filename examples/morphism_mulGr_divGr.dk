@@ -1,0 +1,87 @@
+#REQUIRE divGr.
+
+def Prop_mu : Type := divGr.Prop.
+
+def Prf_mu : Prop_mu -> Type := divGr.Prf.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  divGr.imp.
+
+def and_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  divGr.and.
+
+def imp_i_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu q) ->
+  Prf_mu (imp_mu p q)
+  :=
+  divGr.imp_i.
+
+def imp_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (imp_mu p q)) ->
+  (Prf_mu p) -> Prf_mu q
+  :=
+  divGr.imp_e.
+
+def and_i_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (and_mu p q)
+  :=
+  divGr.and_i.
+
+def and_el_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu p
+  :=
+  divGr.and_el.
+
+def and_er_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu q
+  :=
+  divGr.and_er.
+
+def i_mu : Type := divGr.i.
+
+def eq_mu :
+  i_mu -> i_mu -> Prop_mu
+  :=
+  divGr.eq.
+
+def refl_mu :
+  x:i_mu -> Prf_mu (eq_mu x x)
+  :=
+  divGr.refl.
+
+def leib_mu :
+  x:i_mu ->
+  y:i_mu ->
+  (Prf_mu (eq_mu x y)) ->
+  P:(i_mu -> Prop_mu) ->
+  (Prf_mu (P x)) -> Prf_mu (P y)
+  :=
+  divGr.leib.
+
+def mul_mu :
+  i_mu -> i_mu -> i_mu
+  :=
+  x => y => divGr.div x (divGr.div divGr.1 y).
+
+def 1_mu : i_mu := divGr.1.
+
+def inv_mu :
+  i_mu -> i_mu
+  :=
+  x => divGr.div divGr.1 x.
+

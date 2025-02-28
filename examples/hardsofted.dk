@@ -1,0 +1,11 @@
+Set : Type.
+El : Set -> Type.
+Prop : Type.
+def Prf : Prop -> Type.
+
+imp : Prop -> Prop -> Prop.
+[p,q] Prf (imp p q) --> Prf p -> Prf q.
+
+all : a : Set -> (El a -> Prop) -> Prop.
+all_i : a : Set -> p : (El a -> Prop) -> (x : El a -> Prf (p x)) -> Prf (all a p).
+all_e : a : Set -> p : (El a -> Prop) -> Prf (all a p) -> x : El a -> Prf (p x).
