@@ -47,7 +47,7 @@ The conditions on the constants are checked by Dedukti, but the conditions on th
 ## Examples
 
 You can find several examples of theory morphisms, logical relations and theory embeddings in the folder `examples`. These examples include:
-- theory morphisms between the multiplicative group and the divisible group,
+- theory morphisms between the multiplication group and the division group,
 - a theory morphism from classical logic to intuitionistic logic,
 - a theory morphism from deduction-style to computation-style,
 - a theory morphism between different subsets of connectives,

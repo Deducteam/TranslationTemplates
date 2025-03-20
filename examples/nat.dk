@@ -15,9 +15,10 @@ succ : El nat -> El nat.
 geq : El nat -> El nat -> Prop.
 
 ax_1 : x : El nat -> Prf (geq x x).
-ax_2 : x : El nat -> Prf (geq (succ x) x).
-ax_3 : x : El nat -> y : El nat -> z : El nat -> 
+ax_2 : x : El nat -> y : El nat -> z : El nat -> 
         Prf (geq x y) -> Prf (geq y z) -> Prf (geq x z).
+ax_3 : x : El nat -> Prf (geq (succ x) x).
+ax_4 : x : El nat -> Prf (geq x (succ x)) -> P : Prop -> Prf P.
 
 rec : P : (El nat -> Prop) -> 
         Prf (P 0) -> 
@@ -28,8 +29,8 @@ thm thm1 : (x : El nat) -> Prf (geq x 0)
   := x => rec 
     (z => geq z 0) 
     (ax_1 0)
-    (x => Px => ax_3 (succ x) x 0 (ax_2 x) Px)
+    (x => Px => ax_2 (succ x) x 0 (ax_3 x) Px)
     x.
 
 thm thm2 : x : El nat -> Prf (geq (succ x) 0)
-  := x => ax_3 (succ x) x 0 (ax_2 x) (thm1 x).
+  := x => ax_2 (succ x) x 0 (ax_3 x) (thm1 x).

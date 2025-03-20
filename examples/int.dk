@@ -11,16 +11,22 @@ all : a : Set -> (El a -> Prop) -> Prop.
 
 int : Set.
 0 : El int.
-succ : El int -> El int.
-pred : El int -> El int.
+def succ : El int -> El int.
+def pred : El int -> El int.
 geq : El int -> El int -> Prop.
 
 ax_1 : x : El int -> Prf (geq x x).
-ax_2 : x : El int -> Prf (geq (succ x) x).
-ax_3 : x : El int -> y : El int -> z : El int -> 
+ax_2 : x : El int -> y : El int -> z : El int -> 
         Prf (geq x y) -> Prf (geq y z) -> Prf (geq x z).
+ax_3 : x : El int -> Prf (geq (succ x) x).
+ax_4 : x : El int -> Prf (geq x (succ x)) -> P : Prop -> Prf P.
+[x] succ (pred x) --> x.
+[x] pred (succ x) --> x.
+ax_5 : x : El int -> Prf (geq x (pred x)).
+ax_6 : x : El int -> Prf (geq (pred x) x) -> P : Prop -> Prf P.
 
-rec : x0 : El int -> P : (El int -> Prop) -> 
-        Prf (P x0) -> 
-        (x : El int -> Prf (geq x x0) -> Prf (P x) -> Prf (P (succ x))) ->
-        x : El int -> Prf (geq x x0) -> Prf (P x).
+rec : P : (El int -> Prop) -> 
+        Prf (P 0) -> 
+        (x : El int -> Prf (geq x 0) -> Prf (P x) -> Prf (P (succ x))) ->
+        (x : El int -> Prf (geq 0 x) -> Prf (P x) -> Prf (P (pred x))) ->
+        x : El int -> Prf (P x).
