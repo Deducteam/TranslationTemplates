@@ -50,6 +50,7 @@ You can find several examples of theory morphisms, logical relations and theory 
 - theory morphisms between the multiplication group and the division group,
 - a theory morphism from classical logic to intuitionistic logic,
 - a theory morphism from deduction-style to computation-style,
+- a theory morphism from propositional logic to Q0 logic,
 - a theory morphism between different subsets of connectives,
 - a theory morphism from hard-sorted logic to soft-sorted logic,
 - a theory morphism from soft-sorted logic to unsorted logic,
