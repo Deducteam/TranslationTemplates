@@ -3,8 +3,8 @@
 [Dedukti](https://github.com/Deducteam/Dedukti) is a proof language based on the λΠ-calculus modulo theory, that is λ-calculus with dependent types and user-defined rewrite rules. 
 
 This tool helps users to perform generic translations inside Dedukti. The three translation templates are:
-- theory morphisms from a source theory to a target theory [RS13],
-- logical relations over a theory morphism [RS13],
+- theory morphisms from a source theory to a target theory [RS13, TR25],
+- logical relations over a theory morphism [RS13, TR25],
 - theory embeddings of a source theory into a target theory [Tra24].
 
 
@@ -63,3 +63,5 @@ You can find several examples of theory morphisms, logical relations and theory 
 [RS13] Florian Rabe and Kristina Sojakova. 2013. Logical relations for a logical framework. ACM Transactions on Compututational Logic 14, 4, Article 32, 34 pages. https://doi.org/10.1145/2536740.2536741
 
 [Tra24] Thomas Traversié. 2024. Proofs for Free in the λΠ-Calculus Modulo Theory.  Proceedings Workshop on Logical Frameworks and Meta-Languages: Theory and Practice (LFMTP 2024), EPTCS 404, pp. 49–63. https://doi.org/10.4204/EPTCS.404.4
+
+[TR25] Thomas Traversié and Florian Rabe. 2025. Formalizing Representation Theorems for a Logical Framework with Rewriting. https://arxiv.org/abs/2504.07537
