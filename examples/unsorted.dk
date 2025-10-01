@@ -6,5 +6,4 @@ imp : Prop -> Prop -> Prop.
 [p,q] Prf (imp p q) --> Prf p -> Prf q.
 
 all : (tm -> Prop) -> Prop.
-all_i : p : (tm -> Prop) -> (x : tm -> Prf (p x)) -> Prf (all p).
-all_e : p : (tm -> Prop) -> Prf (all p) -> x : tm -> Prf (p x).
+[p] Prf (all p) --> x : tm -> Prf (p x).

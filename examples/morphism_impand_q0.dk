@@ -1,0 +1,54 @@
+#REQUIRE q0.
+
+def Prop_mu : Type := q0.El q0.o.
+
+def Prf_mu : Prop_mu -> Type := q0.Prf.
+
+def imp_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  q0.imp.
+
+def and_mu :
+  Prop_mu -> Prop_mu -> Prop_mu
+  :=
+  q0.and.
+
+def imp_i_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  ((Prf_mu p) -> Prf_mu q) ->
+  Prf_mu (imp_mu p q)
+  :=
+  q0.imp_i.
+
+def imp_e_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (imp_mu p q)) ->
+  (Prf_mu p) -> Prf_mu q
+  :=
+  q0.imp_e.
+
+def and_i_mu :
+  p:Prop_mu ->
+  (Prf_mu p) ->
+  q:Prop_mu ->
+  (Prf_mu q) -> Prf_mu (and_mu p q)
+  :=
+  q0.and_i.
+
+def and_el_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu p
+  :=
+  q0.and_el.
+
+def and_er_mu :
+  p:Prop_mu ->
+  q:Prop_mu ->
+  (Prf_mu (and_mu p q)) -> Prf_mu q
+  :=
+  q0.and_er.
+

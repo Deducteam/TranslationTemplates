@@ -8,5 +8,4 @@ imp : Prop -> Prop -> Prop.
 [p,q] Prf (imp p q) --> Prf p -> Prf q.
 
 all : a : Set -> (x : tm -> oftype x a -> Prop) -> Prop.
-all_i : a : Set -> p : (x : tm -> oftype x a -> Prop) -> (x : tm -> h : oftype x a -> Prf (p x h)) -> Prf (all a p).
-all_e : a : Set -> p : (x : tm -> oftype x a -> Prop) -> Prf (all a p) -> x : tm -> h : oftype x a -> Prf (p x h).
+[a,p] Prf (all a p) --> x : tm -> h : oftype x a -> Prf (p x h).

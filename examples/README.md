@@ -7,6 +7,8 @@ We present here some translations performed using the three templates, with appr
 
 - *Between the multiplication group and the division group*: `mulGr` represents the multiplication group while `divGr` represents the same group defined with a division symbol. `morphism_mulGr_divGr.dk` presents a theory morphism from `mulGr.dk` to `divGr.dk`, `morphism_divGr_mulGr.dk` presents a theory morphism from `divGr.dk` to `mulGr.dk`, and `morphism_mulGr_mulGr.dk` presents a theory morphism from `mulGr.dk` to itsfelf.
 
+- *From propositional logic to Q0 logic*: `impand.dk` encodes propositional logic while `q0.dk` encodes Q0 higher-order logic. `morphism_impand_q0.dk` presents a theory morphism from `impand.dk` to `q0.dk`.
+
 - *From classical logic to intuitionistic logic*: `classical.dk` encodes higher-order classical logic while `intuitionistic.dk` encodes higher-order intuitionistic logic. `morphism_classical_intuitionistic.dk` presents a theory morphism from `classical.dk` to `intuitionistic.dk`.
 
 - *From deduction to computation*: `deduction.dk` uses axioms to represent natural deduction rules while `computation.dk` uses rewrite rules to represent natural deduction rules. `morphism_deduction_computation.dk` presents a theory morphism from `deduction.dk` to `computation.dk`.

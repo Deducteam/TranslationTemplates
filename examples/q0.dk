@@ -1,0 +1,77 @@
+Set : Type.
+def El : Set -> Type.
+
+arr : Set -> Set -> Set. 
+[x,y] El (arr x y) --> El x -> El y.
+
+o : Set.
+def Prf : El o -> Type.
+
+eq : a : Set -> El a -> El a -> El o.
+[a,x,y] Prf (eq a x y) --> P : El (arr a o) -> Prf (P x) -> Prf (P y).
+
+funext : a : Set -> b : Set -> f : El (arr a b) -> g : El (arr a b) -> (x : El a -> Prf (eq b (f x) (g x))) -> Prf (eq (arr a b) f g).
+propext : p : El o -> q : El o -> (Prf p -> Prf q) -> (Prf q -> Prf p) -> Prf (eq o p q).
+
+
+(; Encoding of the connectives based on equality ;)
+
+def top : El o
+:= eq (arr o o) (x : (El o) => x) (x : (El o) => x).
+
+def and : El o -> El o -> El o 
+:= p => q => eq (arr (arr o (arr o o)) o) (f => (f p q)) (f => (f top top)).
+
+def imp : El o -> El o -> El o
+:= p => q => eq o (and p q) p.
+
+thm refl : a : Set -> x : El a -> Prf (eq a x x)
+:= a => x => P => Px => Px.
+
+thm sym : a : Set -> x : El a -> y : El a -> Prf (eq a x y) -> Prf (eq a y x)
+:= a => x => y => Hxy => Hxy (z : El a => (eq a z x)) (refl a x).
+
+thm eq_app : a : Set -> b : Set -> f : El (arr a b) -> g : El (arr a b) -> Prf (eq (arr a b) f g) -> x : (El a) -> Prf (eq b (f x) (g x))
+:= a => b => f => g => Hfg => x => Hfg (z : El (arr a b) => (eq b (f x) (z x))) (refl b (f x)).
+
+def top_i : Prf top
+:= P => Hp => Hp.
+
+thm thm_true : p : El o -> Prf p -> Prf (eq o p top)
+:= p=> Hp => propext p top (H : Prf p => top_i) (H : Prf top => Hp).
+
+thm true_thm : p : El o -> Prf (eq o p top) -> Prf p
+:= p => Hpt => sym o p top Hpt (z : El o => z) top_i.
+
+thm and_i : p : El o -> Prf p -> q : El o -> Prf q -> Prf (and p q)
+:= p => Hp => q => Hq => funext (arr o (arr o o)) o (f => (f p q)) (f => (f top top)) 
+    (f => (sym o p top (thm_true p Hp) 
+        (z : El o => (eq o (f z q) (f top top))) 
+        (sym o q top (thm_true q Hq) 
+            (z : El o => (eq o (f top z) (f top top))) 
+            (refl o (f top top))))).
+
+thm and_el : p : El o -> q : El o -> Prf (and p q) -> Prf p
+:= p => q => Hpq => true_thm p 
+    (eq_app (arr o (arr o o)) o 
+        (f => (f p q)) 
+        (f => (f top top)) 
+        Hpq 
+        (x => y => x)).
+
+thm and_er : p : El o -> q : El o -> Prf (and p q) -> Prf q
+:= p => q => Hpq => true_thm q 
+    (eq_app (arr o (arr o o)) o 
+        (f => (f p q)) 
+        (f => (f top top)) 
+        Hpq 
+        (x => y => y)).
+
+thm imp_i : p : El o -> q : El o -> (Prf p -> Prf q) -> Prf (imp p q)
+:= p => q => Hpq => propext (and p q) p 
+    (Hpaq : Prf (and p q) => (and_el p q Hpaq)) 
+    (Hp : Prf p => (and_i p Hp q (Hpq Hp))).
+
+thm imp_e : p : El o -> q : El o -> Prf (imp p q) -> (Prf p -> Prf q)
+:= p => q => Hpq => Hp => and_er p q (true_thm (and p q) 
+    (thm_true p Hp (z : (El o) => (eq o (and p q) z)) Hpq)).

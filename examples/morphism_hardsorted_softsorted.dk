@@ -34,7 +34,7 @@ def all_i_mu :
   (x:(El_mu a) -> Prf_mu (p x)) ->
   Prf_mu (all_mu a p)
   :=
-  a => p => H => softsorted.all_i a (x => h => p (mk_pair a x h)) (x => h => H (mk_pair a x h)).
+  a => p => H => x => h => H (mk_pair a x h).
 
 def all_e_mu :
   a:Set_mu ->
@@ -42,5 +42,5 @@ def all_e_mu :
   (Prf_mu (all_mu a p)) ->
   x:(El_mu a) -> Prf_mu (p x)
   :=
-  a => p => H => m => softsorted.all_e a (x => h => p (mk_pair a x h)) H (fst a m) (snd a m).
+  a => p => H => m => H (fst a m) (snd a m).
 

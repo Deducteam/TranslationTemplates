@@ -28,22 +28,13 @@ def all_mu :
   :=
   a => p => unsorted.all (x => impd (a x) (h => p x h)).
 
-def all_i_mu :
-  a:Set_mu ->
-  p:(x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
-  (x:tm_mu -> h:(oftype_mu x a) -> Prf_mu (p x h)) ->
-  Prf_mu (all_mu a p)
-  :=
-  a => p => H => unsorted.all_i (x => impd (a x) (h => p x h)) 
-    (x => (h => H x h)).
+(; We can check the condition on rewrite rule of all ;)
 
-def all_e_mu :
-  a:Set_mu ->
+#ASSERT (a:Set_mu ->
   p:(x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
-  (Prf_mu (all_mu a p)) ->
-  x:tm_mu -> h:(oftype_mu x a) -> Prf_mu (p x h)
-  :=
-  a => p => H => x => h => 
-    (unsorted.all_e (x => impd (a x) (h => p x h)) H x)
-    h.
+  Prf_mu (all_mu a p)) 
+  ==
+  (a:Set_mu ->
+  p:(x:tm_mu -> (oftype_mu x a) -> Prop_mu) ->
+  x:tm_mu -> h:(oftype_mu x a) -> Prf_mu (p x h)).
 
