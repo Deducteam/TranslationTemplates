@@ -9,6 +9,8 @@ We present here some translations performed using the three templates, with appr
 
 - *From propositional logic to Q0 logic*: `impand.dk` encodes propositional logic while `q0.dk` encodes Q0 higher-order logic. `morphism_impand_q0.dk` presents a theory morphism from `impand.dk` to `q0.dk`.
 
+- *From lists logic to binary trees*: `list.dk` encodes the data structure of list while `tree.dk` encodes the data structure of binary tree. `morphism_list_tree.dk` presents a theory morphism from `list.dk` to `tree.dk`.
+
 - *From classical logic to intuitionistic logic*: `classical.dk` encodes higher-order classical logic while `intuitionistic.dk` encodes higher-order intuitionistic logic. `morphism_classical_intuitionistic.dk` presents a theory morphism from `classical.dk` to `intuitionistic.dk`.
 
 - *From deduction to computation*: `deduction.dk` uses axioms to represent natural deduction rules while `computation.dk` uses rewrite rules to represent natural deduction rules. `morphism_deduction_computation.dk` presents a theory morphism from `deduction.dk` to `computation.dk`.

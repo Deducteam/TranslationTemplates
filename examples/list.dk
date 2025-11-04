@@ -1,0 +1,10 @@
+Set : Type.
+El : Set -> Type.
+list : Set -> Type.
+nil : a : Set -> list a.
+cons : a : Set -> El a -> list a -> list a.
+def hd : a : Set -> list a -> El a.
+def tl : a : Set -> list a -> list a.
+
+[a',a,x,l] hd a' (cons a x l) --> x.
+[a',a,x,l] tl a' (cons a x l) --> l.
