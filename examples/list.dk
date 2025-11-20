@@ -1,10 +1,13 @@
 Set : Type.
 El : Set -> Type.
-list : Set -> Type.
-nil : a : Set -> list a.
-cons : a : Set -> El a -> list a -> list a.
-def hd : a : Set -> list a -> El a.
-def tl : a : Set -> list a -> list a.
+list : Set -> Set.
+nil : a : Set -> El (list a).
+cons : a : Set -> El a -> El (list a) -> El (list a).
+def hd : a : Set -> El (list a) -> El a.
+def tl : a : Set -> El (list a) -> El (list a).
+def concat : a : Set -> El (list a) -> El (list a) -> El (list a).
 
 [a',a,x,l] hd a' (cons a x l) --> x.
 [a',a,x,l] tl a' (cons a x l) --> l.
+[a',a,l] concat a' (nil a) l --> l.
+[a',a,x,l1,l2] concat a' (cons a x l1) l2 --> cons a x (concat a l1 l2).

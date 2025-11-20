@@ -4,26 +4,42 @@ def Set_mu : Type := tree.Set.
 
 def El_mu : Set_mu -> Type := tree.El.
 
-def list_mu : Set_mu -> Type := tree.tree.
+def list_mu :
+  Set_mu -> Set_mu
+  :=
+  tree.tree.
 
 def nil_mu :
-  a:Set_mu -> list_mu a
+  a:Set_mu -> El_mu (list_mu a)
   :=
   tree.leaf.
 
 def cons_mu :
   a:Set_mu ->
-  (El_mu a) -> (list_mu a) -> list_mu a
+  (El_mu a) ->
+  (El_mu (list_mu a)) ->
+  El_mu (list_mu a)
   :=
   a => x => l => tree.node a x l (tree.leaf a).
 
 def hd_mu :
-  a:Set_mu -> (list_mu a) -> El_mu a
+  a:Set_mu ->
+  (El_mu (list_mu a)) -> El_mu a
   :=
   a => l => tree.root a l.
 
 def tl_mu :
-  a:Set_mu -> (list_mu a) -> list_mu a
+  a:Set_mu ->
+  (El_mu (list_mu a)) ->
+  El_mu (list_mu a)
   :=
   a => l => tree.left a l.
+
+def concat_mu :
+  a:Set_mu ->
+  (El_mu (list_mu a)) ->
+  (El_mu (list_mu a)) ->
+  El_mu (list_mu a)
+  :=
+  a => l1 => l2 => tree.compo a l1 l2.
 

@@ -1,12 +1,15 @@
 Set : Type.
 El : Set -> Type.
-tree : Set -> Type.
-leaf : a : Set -> tree a.
-node : a : Set -> El a -> tree a -> tree a -> tree a.
-def left : a : Set -> tree a -> tree a.
-def right : a : Set -> tree a -> tree a.
-def root : a : Set -> tree a -> El a.
+tree : Set -> Set.
+leaf : a : Set -> El (tree a).
+node : a : Set -> El a -> El (tree a) -> El (tree a) -> El (tree a).
+def left : a : Set -> El (tree a) -> El (tree a).
+def right : a : Set -> El (tree a) -> El (tree a).
+def root : a : Set -> El (tree a) -> El a.
+def compo : a : Set -> El (tree a) -> El (tree a) -> El (tree a).
 
 [a',a,x,l,r] left a' (node a x l r) --> l.
 [a',a,x,l,r] right a' (node a x l r) --> r.
 [a',a,x,l,r] root a' (node a x l r) --> x.
+[a',a,t] compo a' (leaf a) t --> t.
+[a',a,x,l,r,t] compo a' (node a x l r) t --> node a x (compo a l t) r.
