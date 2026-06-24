@@ -16,7 +16,7 @@ leib : x : i -> y : i -> Prf (eq x y) -> P : (i -> Prop) -> Prf (P x) -> Prf (P 
 
 def div : i -> i -> i.
 1 : i.
-[x,y,z] div (div x y) z --> div x (div y (div 1 z)).
-[x] div 1 (div 1 x) --> x.
+[x,y] div 1 (div x y) --> div y x.
 [x] div x 1 --> x.
 [x] div x x --> 1.
+[x,y,z] div (div x (div 1 y)) (div 1 z) --> div x (div (div 1 z) y).

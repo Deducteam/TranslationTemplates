@@ -24,3 +24,6 @@ def inv : i -> i.
 [x] mul (inv x) x --> 1.
 [] inv 1 --> 1.
 [x] inv (inv x) --> x.
+[x,y] mul (inv x) (mul x y) --> y.
+[x,y] mul x (mul (inv x) y) --> y.
+[x,y] inv (mul x y) --> mul (inv y) (inv x). 
