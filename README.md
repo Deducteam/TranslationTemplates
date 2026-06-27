@@ -3,9 +3,9 @@
 [Dedukti](https://github.com/Deducteam/Dedukti) is a proof language based on the λΠ-calculus modulo theory, that is λ-calculus with dependent types and user-defined rewrite rules. 
 
 This tool helps users to perform generic translations inside Dedukti. The three translation templates are:
-- theory morphisms from a source theory to a target theory [RS13, TR25],
-- logical relations over a theory morphism [RS13, TR25],
-- theory embeddings of a source theory into a target theory [Tra24].
+- **theory morphisms** from a source theory to a target theory [RS13, TR25],
+- **logical relations** over a theory morphism [RS13, TR25],
+- **theory embeddings** of a source theory into a target theory [Tra24].
 
 
 ## Requirements
