@@ -1,0 +1,11 @@
+lib: [
+  "_build/install/default/lib/translation/META"
+  "_build/install/default/lib/translation/dune-package"
+  "_build/install/default/lib/translation/opam"
+]
+bin: [
+  "_build/install/default/bin/translation"
+]
+doc: [
+  "_build/install/default/doc/translation/README.md"
+]
