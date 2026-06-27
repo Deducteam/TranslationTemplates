@@ -1,5 +1,0 @@
-nat : Type.
-f : nat -> nat.
-n : nat.
-
-#ASSERT (n : nat => f n) == f.
