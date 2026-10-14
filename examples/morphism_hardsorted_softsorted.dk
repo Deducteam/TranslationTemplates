@@ -1,13 +1,14 @@
 #REQUIRE softsorted.
 
 pair : softsorted.Set -> Type.
-def mk_pair : a : softsorted.Set -> x : softsorted.tm -> softsorted.oftype x a -> pair a.
+mk_pair : a : softsorted.Set -> x : softsorted.tm -> softsorted.oftype x a -> pair a.
 def fst : a : softsorted.Set -> m : pair a -> softsorted.tm.
 def snd : a : softsorted.Set -> m : pair a -> softsorted.oftype (fst a m) a.
 
-[a, x, h] fst a (mk_pair a x h) --> x.
-[a, x, h] snd a (mk_pair a x h) --> h.
-[a, m] mk_pair a (fst a m) (snd a m) --> m.
+[a, a', x, h] fst a (mk_pair a' x h) --> x.
+[a, a', x, h] snd a (mk_pair a' x h) --> h.
+
+surjective_pairing : a : softsorted.Set -> m : pair a -> P : (pair a -> softsorted.Prop) -> softsorted.Prf (P (mk_pair a (fst a m) (snd a m))) -> softsorted.Prf (P m).
 
 def Set_mu : Type := softsorted.Set.
 
@@ -42,5 +43,5 @@ def all_e_mu :
   (Prf_mu (all_mu a p)) ->
   x:(El_mu a) -> Prf_mu (p x)
   :=
-  a => p => H => m => H (fst a m) (snd a m).
+  a => p => H => m => surjective_pairing a m p (H (fst a m) (snd a m)).
 

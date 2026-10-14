@@ -4,13 +4,14 @@ impd : (p : int.Prop) -> (int.Prf p -> int.Prop) -> int.Prop.
 [p,q] int.Prf (impd p q) --> h : int.Prf p -> int.Prf (q h).
 
 pair : a : int.Set -> (int.El a -> int.Prop) -> int.Set.
-def mk_pair : a : int.Set -> p : (int.El a -> int.Prop) -> x : int.El a -> int.Prf (p x) -> int.El (pair a p).
+mk_pair : a : int.Set -> p : (int.El a -> int.Prop) -> x : int.El a -> int.Prf (p x) -> int.El (pair a p).
 def fst : a : int.Set -> p : (int.El a -> int.Prop) -> int.El (pair a p) -> int.El a.
 def snd : a : int.Set -> p : (int.El a -> int.Prop) -> m : int.El (pair a p) -> int.Prf (p (fst a p m)).
 
-[a, p, x, h] fst a p (mk_pair a p x h) --> x.
-[a, p, x, h] snd a p (mk_pair a p x h) --> h.
-[a, p, m] mk_pair a p (fst a p m) (snd a p m) --> m.
+[a, a', p, p', x, h] fst a p (mk_pair a' p' x h) --> x.
+[a, a', p, p', x, h] snd a p (mk_pair a' p' x h) --> h.
+
+surjective_pairing : a : int.Set -> p : (int.El a -> int.Prop) -> m : int.El (pair a p) -> P : (int.El (pair a p) -> int.Prop) -> int.Prf (P (mk_pair a p (fst a p m) (snd a p m))) -> int.Prf (P m).
 
 proof_irr : 
   (p : int.Prop) -> 
@@ -99,7 +100,7 @@ def rec_mu :
    (Prf_mu (P x)) -> Prf_mu (P (succ_mu x))) ->
   x:(El_mu nat_mu) -> Prf_mu (P x)
   :=
-  P => H0 => HR => m => int.rec 
+  P => H0 => HR => m => surjective_pairing int.int (x => int.geq x int.0) m P (int.rec 
     (x => impd (int.geq x int.0) (h => P (mk_pair int.int (x => int.geq x int.0) x h)))
     (h => proof_irr (int.geq int.0 int.0) (int.ax_1 int.0) h (w => P (mk_pair int.int (x => int.geq x int.0) int.0 w)) H0)
     (x => hx => Hx => hsx => 
@@ -112,7 +113,7 @@ def rec_mu :
           (Hx hx)))
     (x => hx => Hx => hpx => int.ax_6 x (int.ax_2 (int.pred x) (int.0) x hpx hx) (P (mk_pair int.int (x => int.geq x int.0) (int.pred x) hpx)))
     (fst int.int (x => int.geq x int.0) m)
-    (snd int.int (x => int.geq x int.0) m).
+    (snd int.int (x => int.geq x int.0) m)).
 
 thm thm1_mu :
   x:(El_mu nat_mu) ->
