@@ -1,0 +1,32 @@
+Set : Type.
+injective El : Set -> Type.
+o : Set.
+injective Prf : El o -> Type.
+
+arrd : (a : Set) -> (El a -> Set) -> Set.
+[a, b] El (arrd a b) --> (z : El a) -> El (b z).
+
+impd : (a : El o) -> (Prf a -> El o) -> El o.
+[a, b] Prf (impd a b) --> (z : Prf a) -> Prf (b z).
+
+pi : (a : El o) -> (Prf a -> Set) -> Set.
+[a, b] El (pi a b) --> (z : Prf a) -> El (b z).
+
+fa : (a : Set) -> (El a -> El o) -> El o.
+[a, b] Prf (fa a b) --> (z : El a) -> Prf (b z).
+
+int : Set.
+0 : El int.
+succ : El int -> El int.
+pred : El int -> El int.
+geq : El int -> El int -> El o.
+
+ax_1 : (x : El int) -> Prf (geq x x).
+ax_2 : (x : El int) -> Prf (geq (succ x) x).
+ax_3 : (x : El int) -> (y : El int) -> (z : El int) -> 
+        Prf (geq x y) -> Prf (geq y z) -> Prf (geq x z).
+
+rec : (x0 : El int) -> (P : (El int -> El o)) -> 
+        Prf (P x0) -> 
+        ((x : El int) -> Prf (geq x x0) -> Prf (P x) -> Prf (P (succ x))) ->
+        (x : El int) -> Prf (geq x x0) -> Prf (P x).
